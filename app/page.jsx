@@ -18,7 +18,7 @@ export default function Home() {
     await addToCart(product);
     setAddingProductId(null);
   }
-  dlckj
+
 
   return (
     <div className="min-h-[calc(100vh-60px)] p-6">
