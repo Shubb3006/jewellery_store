@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -25,8 +24,27 @@ const paymentMethodStyles = {
   ONLINE: "bg-indigo-100 text-indigo-700",
 };
 
+const orderStatusOptions = {
+  PLACED: ["CONFIRMED", "CANCELLED", "SHIPPED"],
+  CONFIRMED: ["SHIPPED", "CANCELLED"],
+  SHIPPED: ["DELIVERED"],
+  DELIVERED: [],
+  CANCELLED: [],
+};
+
+const orderPaymentOptions = {
+  PENDING: ["PAID", "FAILED"],
+  FAILED: ["PAID", "PENDING"],
+};
+
 export default function AdminDashboard() {
-  const { allOrders, getAllOrders, gettingOrders } = useAdminStore();
+  const {
+    allOrders,
+    getAllOrders,
+    gettingAllOrders,
+    updateOrderStatus,
+    updatePaymentStatus,
+  } = useAdminStore();
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
@@ -35,11 +53,11 @@ export default function AdminDashboard() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <h1 className="text-2xl font-bold mb-5 pl-5">All Orders</h1>
+      <h1 className="text-2xl font-bold mb-5 ml-10 mt-1">All Orders</h1>
 
-      {gettingOrders ? (
+      {gettingAllOrders ? (
         <div className="flex justify-center items-center min-h-[60vh]">
-          <Loader2 className="animate-spin w-8 h-8" />
+          <Loader2 className="animate-spin" />
         </div>
       ) : allOrders.length === 0 ? (
         <div className="flex justify-center items-center min-h-[60vh]">
@@ -87,22 +105,64 @@ export default function AdminDashboard() {
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-2">
-                    <span
-                      className={`inline-block px-2 py-1 text-xs sm:text-sm rounded-full font-medium ${
+                    <div
+                      className={`inline-block rounded-full px-2 py-1 ${
                         orderStatusStyles[order.orderStatus]
                       }`}
                     >
-                      {order.orderStatus}
-                    </span>
+                      <select
+                        className="bg-transparent outline-none"
+                        value={order.orderStatus}
+                        disabled={
+                          order.orderStatus === "DELIVERED" ||
+                          order.orderStatus === "CANCELLED"
+                        }
+                        onChange={(e) =>
+                          updateOrderStatus(order._id, e.target.value)
+                        }
+                      >
+                        <option value={order.orderStatus}>
+                          {order.orderStatus}
+                        </option>
+
+                        {orderStatusOptions[order.orderStatus]?.map(
+                          (status) => (
+                            <option key={status} value={status}>
+                              {status}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
                   </td>
+
                   <td className="px-4 py-2">
-                    <span
-                      className={`inline-block px-2 py-1 text-xs sm:text-sm rounded-full font-medium ${
+                    <div
+                      className={`inline-block rounded-full px-2 py-1 ${
                         paymentStatusStyles[order.paymentStatus]
                       }`}
                     >
-                      {order.paymentStatus}
-                    </span>
+                      <select
+                        className="bg-transparent outline-none"
+                        value={order.paymentStatus}
+                        disabled={order.paymentStatus === "PAID"}
+                        onChange={(e) =>
+                          updatePaymentStatus(order._id, e.target.value)
+                        }
+                      >
+                        <option value={order.paymentStatus}>
+                          {order.paymentStatus}
+                        </option>
+
+                        {orderPaymentOptions[order.paymentStatus]?.map(
+                          (paymentStatus) => (
+                            <option key={paymentStatus} value={paymentStatus}>
+                              {paymentStatus}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
                   </td>
                   <td className="px-4 py-2">
                     <span

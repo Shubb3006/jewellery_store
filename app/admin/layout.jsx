@@ -90,7 +90,7 @@ export default function AdminLayout({ children }) {
       <div className="lg:hidden fixed top-4 left-4 z-50">
         {!show && (
           <Menu
-            className="w-6 h-6 cursor-pointer"
+            className="w-6 h-6 mt-4 cursor-pointer"
             onClick={() => setShow(true)}
           />
         )}

@@ -104,27 +104,3 @@ import { requireAdmin } from "@/lib/checkAdmin";
     }
   }
   
-  export async function DELETE(req,{params}){
-    try{
-      const {id}=await params;
-      await requireAdmin(req);
-      if(!id)
-        return NextResponse.json({status:"error",message:"No Product is selected"},{status:401})
-  
-      const product=await Product.findByIdAndUpdate(id, {
-        isActive: false
-      });
-      console.log(product)
-      return NextResponse.json(
-        { status: "success", message:" Product Deleted"},
-      );
-    }
-    catch(err){
-      return NextResponse.json(
-        { status: "error", message: err.message},
-        { status: 500 }
-    );
-    }
-  }
-  
-  

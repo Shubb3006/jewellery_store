@@ -21,7 +21,7 @@ const AddProductModal = ({ onClose }) => {
 
   return (
     <>
-      <div className={`modal modal-open`}>
+      <div className={`modal modal-open shadow-md`}>
         <div
           className="modal-backdrop backdrop-blur-sm bg-black/40"
           onClick={onClose}
@@ -39,7 +39,7 @@ const AddProductModal = ({ onClose }) => {
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              placeholder="Enter the name of the product"
+              placeholder="Name"
             />
 
             <input
@@ -49,7 +49,16 @@ const AddProductModal = ({ onClose }) => {
               onChange={(e) =>
                 setFormData({ ...formData, price: Number(e.target.value) })
               }
-              placeholder="Enter the Price of the product"
+              placeholder="Price"
+            />
+            <input
+              className="input input-bordered"
+              type="text"
+              value={formData.description}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
+              placeholder="Description"
             />
 
             <input
@@ -59,7 +68,7 @@ const AddProductModal = ({ onClose }) => {
               onChange={(e) =>
                 setFormData({ ...formData, stock: Number(e.target.value) })
               }
-              placeholder="Enter the Stock of the product"
+              placeholder="Stock"
             />
 
             <input
@@ -69,20 +78,10 @@ const AddProductModal = ({ onClose }) => {
               onChange={(e) =>
                 setFormData({ ...formData, category: e.target.value })
               }
-              placeholder="Enter the Category of the product"
+              placeholder="Category"
             />
 
-            <input
-              className="input input-bordered"
-              type="text"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              placeholder="Enter the description of the product"
-            />
-
-            <div className="modal-action">
+            <div className="">
               <button
                 type="submit"
                 className="btn btn-primary"

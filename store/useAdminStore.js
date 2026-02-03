@@ -11,6 +11,9 @@ export const useAdminStore=create((set)=>({
     gettingAllUsers:false,
     isEditngProduct:false,
     isAddingProduct:false,
+    updatingOrderStatus:false,
+    updatingPaymentStatus:false,
+    changingAvailability:false,
 
     getAllOrders:async()=>{
         try {
@@ -85,5 +88,70 @@ export const useAdminStore=create((set)=>({
         }finally{
             set({isAddingProduct:false})
         }
-    }
+    },
+
+    updateOrderStatus: async (orderId, newStatus) => {
+        try {
+          set({ updatingOrderStatus: true });
+      
+          await axiosInstance.put(
+            `/admin/orders/${orderId}/orderStatus`,
+            { status: newStatus }
+          );
+      
+          // update UI without refetching all orders
+          set((state) => ({
+            allOrders: state.allOrders.map((order) =>
+              order._id === orderId
+                ? { ...order, orderStatus: newStatus }
+                : order
+            ),
+          }));
+        } catch (error) {
+          toast.error("Failed to update order status");
+        } finally {
+          set({ updatingOrderStatus: false });
+        }
+      },
+      updatePaymentStatus: async (orderId, newPaymentStatus) => {
+        try {
+          set({ updatingPaymentStatus: true });
+      
+          await axiosInstance.put(
+            `/admin/orders/${orderId}/paymentStatus`,
+            { paymentStatus: newPaymentStatus }
+          );
+      
+          // update UI without refetching all orders
+          set((state) => ({
+            allOrders: state.allOrders.map((order) =>
+              order._id === orderId
+                ? { ...order, paymentStatus: newPaymentStatus }
+                : order
+            ),
+          }));
+        } catch (error) {
+          toast.error("Failed to update Payment status");
+        } finally {
+          set({ updatingPaymentStatus: false });
+        }
+      },
+
+      changeAvailability:async(productId,newAvailability)=>{
+        try {
+            set({ changingAvailability: true });
+        
+            await axiosInstance.put(
+              `/admin/products/${productId}/status`,
+              { availability: newAvailability }
+            );
+            useProductStore.getState().getAllProducts()
+           
+            // update UI without refetching all orders
+          } catch (error) {
+            toast.error("Failed to update Payment status");
+          } finally {
+            set({ changingAvailability: false });
+          }
+        },
 }))
