@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Loader2, Eye, Users, Box, Home, LogOut } from "lucide-react";
 import { useAdminStore } from "@/store/useAdminStore";
+import ShowOrderModal from "@/components/modals/ShowOrderModal";
 
 const orderStatusStyles = {
   PLACED: "bg-yellow-100 text-yellow-700",
@@ -33,7 +34,7 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen ">
       {/* Main Content */}
       <main className="flex-1 p-6">
         <h1 className="text-2xl font-bold mb-6">All Orders</h1>
@@ -61,9 +62,9 @@ export default function AdminDashboard() {
                   <th className="px-4 py-2 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
+              <tbody className="divide-y  ">
                 {allOrders.map((order) => (
-                  <tr key={order._id} className="hover:bg-gray-50">
+                  <tr key={order._id}>
                     <td className="px-4 py-2">{order._id.slice(-6)}</td>
                     <td className="px-4 py-2">
                       {order.userId?.name || order.userId?.email || "Unknown"}
@@ -118,52 +119,10 @@ export default function AdminDashboard() {
 
         {/* Modal */}
         {selectedOrder && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-lg max-w-3xl w-full p-6 overflow-y-auto max-h-[80vh] relative">
-              <h2 className="text-xl font-bold mb-4">Order Details</h2>
-              <button
-                className="btn btn-sm btn-error absolute top-4 right-4"
-                onClick={() => setSelectedOrder(null)}
-              >
-                Close
-              </button>
-
-              <div className="space-y-4">
-                {selectedOrder.items.map((item) => (
-                  <div key={item._id} className="flex gap-4 border-b pb-2">
-                    <div className="w-20 h-20 bg-gray-100 rounded overflow-hidden">
-                      <img
-                        src={item.product?.images?.[0] || "/placeholder.png"}
-                        alt={item.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-semibold">{item.name}</p>
-                      <p className="text-sm text-gray-500">
-                        Quantity: {item.quantity}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        Price: ₹{item.priceAtOrder}
-                      </p>
-                    </div>
-                    <div className="font-semibold">
-                      ₹{item.priceAtOrder * item.quantity}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 border-t pt-4 flex justify-between items-center">
-                <p className="text-sm text-gray-600">
-                  Delivery Address: {selectedOrder.address}
-                </p>
-                <p className="text-lg font-bold">
-                  Total: ₹{selectedOrder.totalAmount}
-                </p>
-              </div>
-            </div>
-          </div>
+          <ShowOrderModal
+            selectedOrder={selectedOrder}
+            onClose={() => setSelectedOrder(null)}
+          />
         )}
       </main>
     </div>

@@ -8,7 +8,13 @@ export async function POST(req) {
     await connectDB();
     await requireAdmin(req)
     const body = await req.json();
-
+      
+    if (!body.name || !body.price) {
+      return NextResponse.json(
+        { status: "error", message: "Name and Price are required" },
+        { status: 400 }
+      );
+    }
     const product = await productModel.create(body);
 
     return NextResponse.json({
