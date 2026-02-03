@@ -41,7 +41,7 @@ export const useAdminStore=create((set)=>({
     deleteProduct:async(productId)=>{
         try {
             set({deletingProduct:true});
-            const res=await axiosInstance.delete(`/admin/products/${productId}`);
+            await axiosInstance.delete(`/admin/products/${productId}`);
             useProductStore.getState().getAllProducts()
 
         } catch (error) {
