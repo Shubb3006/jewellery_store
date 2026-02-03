@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
+import { Loader2 } from "lucide-react";
 
 export default function AuthProvider({ children }) {
   const { checkAuth, isCheckingAuth, authUser } = useAuthStore();
@@ -13,7 +14,7 @@ export default function AuthProvider({ children }) {
   if (isCheckingAuth) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
+        <Loader2 className="animate-spin" />
       </div>
     );
   }

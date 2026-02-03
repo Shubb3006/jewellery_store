@@ -2,17 +2,26 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import CartButton from "./CartButton";
+import { Loader2 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
-  const { authUser, logout, checkAuth } = useAuthStore();
+  const pathname = usePathname();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  const { authUser, logout, isCheckingAuth } = useAuthStore();
 
+  if (isCheckingAuth) {
+    return (
+      <div className="navbar bg-base-100 shadow-md px-6">
+        <div className="navbar-end">
+          <Loader2 />
+        </div>
+      </div>
+    );
+  }
+  if (pathname.startsWith("/admin")) return null;
   return (
     <div className="navbar bg-base-100 shadow-md sticky top-0 z-50 px-6">
       {/* LEFT */}

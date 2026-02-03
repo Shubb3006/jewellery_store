@@ -1,18 +1,21 @@
 "use client";
 import { Eye, EyeClosed, Loader2, Lock, Mail } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [emailErr, setEmailErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
-  
-  const { login, isLoggingIn} = useAuthStore();
- 
+
+  const { login, isLoggingIn } = useAuthStore();
 
   const handleEmailError = () => {
     if (!formData.email.trim()) {
@@ -58,7 +61,13 @@ const Login = () => {
       toast.error("Please fix the errors");
       return;
     }
-    login({ ...formData, email: formData.email.toLowerCase() });
+    const success = await login({
+      ...formData,
+      email: formData.email.toLowerCase(),
+    });
+    if (success) {
+      router.replace(redirectTo);
+    }
   }
 
   return (

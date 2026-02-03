@@ -6,13 +6,11 @@ import { clearGuestCart, getGuestCart } from "@/lib/guestCart";
 
 export const useAuthStore=create((set,get)=>({
     authUser:null,
-    isCheckingAuth:false,
+    isCheckingAuth:true,
     isLoggingIn:false,
     isSigningUp:false,
     isLoggingOut:false,
-    hasCheckedAuth: false, 
     checkAuth: async () => {
-      if(get().hasCheckedAuth) return;
         set({ isCheckingAuth: true });
         try {
           const res = await axiosInstance.get("/auth/check");
@@ -62,6 +60,8 @@ export const useAuthStore=create((set,get)=>({
           }
           useCartStore.getState().getCart();
           toast.success("Login Successfull");
+
+          return true
 
         } catch (error) {
             toast.error(error?.response?.data?.message);

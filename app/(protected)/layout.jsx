@@ -1,20 +1,28 @@
 "use client";
 
 import { useAuthStore } from "@/store/useAuthStore";
-import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function ProtectedLayout({ children }) {
   const { authUser, isCheckingAuth } = useAuthStore();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isCheckingAuth && !authUser) {
-      router.replace("/login");
+      router.replace(`/login?redirect=${pathname}`);
     }
-  }, [authUser, isCheckingAuth]);
+  }, [authUser, isCheckingAuth, pathname]);
 
-  if (isCheckingAuth) return null;
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
+  }
 
   return children;
 }

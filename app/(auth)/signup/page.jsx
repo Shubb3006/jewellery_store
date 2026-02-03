@@ -15,8 +15,7 @@ const Page = () => {
   const [emailErr, setEmailErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
   const [nameErr, setNameErr] = useState("");
-  const { signup, isSigningUp} =
-    useAuthStore();
+  const { signup, isSigningUp } = useAuthStore();
 
   const handleEmailError = () => {
     if (!formData.email.trim()) {
@@ -74,7 +73,7 @@ const Page = () => {
       toast.error("Please fix the errors");
       return;
     }
-    signup(formData);
+    await signup(formData);
 
     setFormData({ email: "", password: "", name: "" });
   }

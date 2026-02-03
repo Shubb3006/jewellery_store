@@ -27,12 +27,12 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-        <Navbar />
+          <Navbar />
         {children}
         <Toaster
           position="top-center"
           toastOptions={{
-            duration: 3000,
+            duration: 2000,
           }} />
           </AuthProvider>
       </body>
