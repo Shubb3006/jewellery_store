@@ -1,13 +1,15 @@
 "use client";
 
 import { useAuthStore } from "@/store/useAuthStore";
-import { Box, Home, Loader2, LogOut, Users } from "lucide-react";
+import { Box, Home, Loader2, LogOut, Users, Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import NavAdminLinks from "@/components/NavAdminLinks";
 
 export default function AdminLayout({ children }) {
   const { authUser, isCheckingAuth, logout } = useAuthStore();
+  const [show, setShow] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -44,39 +46,55 @@ export default function AdminLayout({ children }) {
 
   return (
     <div className="min-h-screen flex bg-base-200">
-      {/* SIDEBAR */}
-      <aside className="w-64 shadow-md flex flex-col">
+      {/* Mobile Sidebar Overlay */}
+      {show && (
+        <div className="fixed inset-0 z-50 flex lg:hidden">
+          <aside className="w-64 bg-base-200 shadow-md flex flex-col">
+            <div className="p-6 text-xl font-bold border-b flex justify-between items-center">
+              Admin Panel
+              <X className="cursor-pointer" onClick={() => setShow(false)} />
+            </div>
+            <nav
+              className="flex-1 p-4 space-y-2"
+              onClick={() => setShow(false)}
+            >
+              <NavAdminLinks />
+              <button
+                className="btn btn-error w-full mt-auto"
+                onClick={handleLogout}
+              >
+                <LogOut size={18} /> Logout
+              </button>
+            </nav>
+          </aside>
+          {/* Overlay backdrop */}
+          <div className="flex-1 bg-black/40" onClick={() => setShow(false)} />
+        </div>
+      )}
+
+      {/* Desktop Sidebar */}
+      <aside className="hidden lg:flex w-64 shadow-md flex-col">
         <div className="p-6 text-xl font-bold border-b">Admin Panel</div>
         <nav className="flex-1 p-4 space-y-2">
-          <Link
-            href="/admin/"
-            className="flex items-center gap-2 p-2 rounded hover:bg-base-100"
+          <NavAdminLinks />
+          <button
+            className="btn btn-error w-full mt-auto"
+            onClick={handleLogout}
           >
-            <Home size={18} /> Dashboard
-          </Link>
-          <Link
-            href="/admin/orders"
-            className="flex items-center gap-2 p-2 rounded hover:bg-base-100 font-semibold"
-          >
-            <Box size={18} /> Orders
-          </Link>
-          <Link
-            href="/admin/users"
-            className="flex items-center gap-2 p-2 rounded hover:bg-base-100"
-          >
-            <Users size={18} /> Users
-          </Link>
-          <Link
-            href="/admin/products"
-            className="flex items-center gap-2 p-2 rounded hover:bg-base-100"
-          >
-            <Users size={18} /> Products
-          </Link>
-          <button className="btn btn-error" onClick={handleLogout}>
             <LogOut size={18} /> Logout
           </button>
         </nav>
       </aside>
+
+      {/* Mobile Menu Button */}
+      <div className="lg:hidden fixed top-4 left-4 z-50">
+        {!show && (
+          <Menu
+            className="w-6 h-6 cursor-pointer"
+            onClick={() => setShow(true)}
+          />
+        )}
+      </div>
 
       {/* MAIN CONTENT */}
       <main className="flex-1 p-6 overflow-y-auto">{children}</main>
