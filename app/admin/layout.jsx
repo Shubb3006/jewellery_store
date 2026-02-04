@@ -1,10 +1,9 @@
 "use client";
 
 import { useAuthStore } from "@/store/useAuthStore";
-import { Box, Home, Loader2, LogOut, Users, Menu, X } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { Loader2, LogOut, Menu, X } from "lucide-react";
+import {  usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import NavAdminLinks from "@/components/NavAdminLinks";
 
 export default function AdminLayout({ children }) {

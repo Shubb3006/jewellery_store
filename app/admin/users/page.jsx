@@ -22,14 +22,20 @@ export default function AdminUsers() {
           <p className="text-xl font-semibold">No Users found</p>
         </div>
       ) : (
-        <div className="overflow-x-auto bg-base-100 shadow rounded">
+        <div className="overflow-x-auto bg-base-100 shadow rounded-lg border border-gray-200">
           <table className="table divide-y divide-gray-200">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th></th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">
+                  Name
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">
+                  Email
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-semibold">
+                  Role
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-semibold"></th>
               </tr>
             </thead>
 
