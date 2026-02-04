@@ -6,6 +6,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import CartButton from "./CartButton";
 import { Loader2 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "./ThemeToggler";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -33,6 +34,8 @@ const Navbar = () => {
 
       {/* RIGHT */}
       <div className="navbar-end gap-3">
+        <ThemeToggle />
+
         {/* Cart Icon */}
         <CartButton />
 

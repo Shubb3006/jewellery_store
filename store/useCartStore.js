@@ -3,7 +3,6 @@ import { create } from "zustand";
 import {toast} from "react-hot-toast"
 import { useAuthStore } from "./useAuthStore";
 import { addToGuestCart, deleteItemGuestCart, getGuestCart, removeFromGuestCart, updateGuestCartQuantity } from "@/lib/guestCart";
-import useProductStore from "./useProductStore";
 
 export const useCartStore=create((set,get)=>({
     cart:[],

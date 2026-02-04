@@ -85,35 +85,37 @@ export default function Home() {
                   key={p._id}
                   className="group relative rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
                 >
-                  {/* IMAGE */}
-                  <div className="relative h-52 overflow-hidden">
-                    <img
-                      src={p.images?.[0]}
-                      alt={p.name}
-                      className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
+                  {/* CLICKABLE PART */}
+                  <Link href={`/products/${p._id}`}>
+                    <div className="relative h-52 overflow-hidden cursor-pointer">
+                      <img
+                        loading="lazy"
+                        draggable={false}
+                        src={p.images?.[0]}
+                        alt={p.name}
+                        className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
 
-                    {isUnavailable && (
-                      <span className="absolute top-3 left-3 badge badge-error text-xs">
-                        Out of stock
-                      </span>
-                    )}
-                  </div>
-
-                  {/* CONTENT */}
-                  <div className="p-4 flex flex-col gap-2">
-                    <h2 className="text-sm font-medium line-clamp-2 min-h-[40px]">
-                      {p.name}
-                    </h2>
-
-                    {/* PRICE */}
-                    <div className="flex items-center justify-between">
-                      <p className="text-xl font-bold ">₹{p.price}</p>
+                      {isUnavailable && (
+                        <span className="absolute top-3 left-3 badge badge-error text-xs">
+                          Out of stock
+                        </span>
+                      )}
                     </div>
 
-                    {/* ACTION */}
+                    <div className="p-4">
+                      <h2 className="text-sm font-medium line-clamp-2 min-h-[40px]">
+                        {p.name}
+                      </h2>
+
+                      <p className="text-xl font-bold mt-2">₹{p.price}</p>
+                    </div>
+                  </Link>
+
+                  {/* ACTION AREA (NOT CLICKABLE FOR NAVIGATION) */}
+                  <div className="px-4 pb-4">
                     {cartItem ? (
-                      <div className="mt-3 flex items-center justify-between  rounded-lg px-3 py-1">
+                      <div className="flex items-center justify-between rounded-lg px-3 py-1">
                         <button
                           onClick={() => handleDec(p)}
                           disabled={changingQuantityId === p._id}
@@ -141,7 +143,7 @@ export default function Home() {
                           (isAddingItem && addingProductId === p._id)
                         }
                         onClick={() => handleAddingProduct(p)}
-                        className="btn btn-primary w-full mt-3 rounded-lg"
+                        className="btn btn-primary w-full rounded-lg"
                       >
                         {isAddingItem && addingProductId === p._id ? (
                           <Loader2 className="animate-spin" size={18} />

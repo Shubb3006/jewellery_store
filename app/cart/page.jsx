@@ -1,4 +1,5 @@
 "use client";
+
 import { useCartStore } from "@/store/useCartStore";
 import { useEffect, useState } from "react";
 import { Loader2, Minus, Plus } from "lucide-react";
@@ -17,6 +18,7 @@ const Page = () => {
     deleteItem,
     isDeleting,
   } = useCartStore();
+
   const { checkOut, isCheckingOut } = useCheckoutStore();
   const { authUser } = useAuthStore();
 
@@ -39,17 +41,16 @@ const Page = () => {
     setChangingQuantityId(null);
   };
 
-  async function handleDelete(product) {
+  const handleDelete = async (product) => {
     setDeletingId(product._id);
     await deleteItem(product);
     setDeletingId(null);
-  }
+  };
 
-  console.log(cart);
-  async function handleCheckOut() {
+  const handleCheckOut = async () => {
     const success = await checkOut();
     if (success) router.push("/orders");
-  }
+  };
 
   if (gettingCartItems) {
     return (
@@ -60,7 +61,7 @@ const Page = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="max-w-6xl mx-auto p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
       {/* CART ITEMS */}
       <div className="md:col-span-2 space-y-4">
         <h1 className="text-2xl font-bold">Your Cart 🛒</h1>
@@ -71,7 +72,7 @@ const Page = () => {
           </div>
         ) : (
           cart.map((item) => {
-            const product = item?.productId;
+            const product = item.productId;
 
             const isUnavailable =
               item.unavailable ||
@@ -84,7 +85,7 @@ const Page = () => {
             return (
               <div
                 key={product?._id || item._id}
-                className={`card bg-base-100 shadow-md p-4 flex flex-row gap-4 items-center ${
+                className={`card bg-base-100 shadow-md p-4 flex flex-col sm:flex-row gap-4 ${
                   isUnavailable ? "opacity-60 border border-error" : ""
                 } ${outOfStock ? "border border-error" : ""}`}
               >
@@ -92,7 +93,7 @@ const Page = () => {
                 <img
                   src={product?.images?.[0] || "/placeholder.png"}
                   alt={product?.name || "Product"}
-                  className="w-24 h-24 object-cover rounded-lg"
+                  className="w-full sm:w-24 h-40 sm:h-24 object-cover rounded-lg"
                 />
 
                 {/* INFO */}
@@ -113,12 +114,12 @@ const Page = () => {
 
                   {outOfStock && (
                     <p className="text-error text-sm mt-1">
-                      Please Decrease the quantity
+                      Please decrease the quantity.
                     </p>
                   )}
 
                   {/* QUANTITY */}
-                  <div className="flex items-center gap-3 mt-2">
+                  <div className="flex flex-wrap items-center gap-2 mt-3">
                     <button
                       className="btn btn-sm btn-outline"
                       onClick={() => handleDec(product)}
@@ -160,14 +161,14 @@ const Page = () => {
 
                     {isChangingQuantity &&
                       changingQuantityId === product._id && (
-                        <Loader2 className="animate-spin" />
+                        <Loader2 className="animate-spin w-4 h-4" />
                       )}
                   </div>
                 </div>
 
                 {/* PRICE */}
                 {!isUnavailable && (
-                  <div className="text-right">
+                  <div className="text-left sm:text-right mt-2 sm:mt-0">
                     <p className="font-bold text-lg">
                       ₹{product.price * item.quantity}
                     </p>
@@ -180,7 +181,7 @@ const Page = () => {
       </div>
 
       {/* SUMMARY */}
-      <div className="card bg-base-100 shadow-lg p-6 h-fit sticky top-24">
+      <div className="card bg-base-100 shadow-lg p-6 h-fit sm:sticky sm:top-24">
         <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
 
         <div className="flex justify-between mb-2">
@@ -192,7 +193,10 @@ const Page = () => {
           <span>Total Price</span>
           <span className="font-bold">
             ₹
-            {cart.reduce((acc, i) => acc + i.productId?.price * i?.quantity, 0)}
+            {cart.reduce(
+              (acc, i) => acc + (i.productId?.price || 0) * i.quantity,
+              0
+            )}
           </span>
         </div>
 
