@@ -10,8 +10,16 @@ import { Edit, Loader2 } from "lucide-react";
 const page = () => {
   const [editProduct, setEditProduct] = useState(null);
   const [addProduct, setAddProduct] = useState(false);
+  const [changingAvailabilityId, setChangingAvailabilityId] = useState(null);
+  const [changingFeaturingId, setChangingFeaturingIdId] = useState(null);
   const { products, gettingAllProducts, getAllProducts } = useProductStore();
-  const { changeAvailability, changeFeaturing } = useAdminStore();
+  const {
+    changeAvailability,
+    changeFeaturing,
+    changingFeaturing,
+    changingAvailability,
+    
+  } = useAdminStore();
 
   useEffect(() => {
     getAllProducts();
@@ -88,50 +96,62 @@ const page = () => {
                     <td className="px-4 py-2">{product.stock}</td>
                     <td className="px-4 py-2">{product.category}</td>
                     <td>
-                      <div
-                        className={`inline-block rounded-full px-2 py-1 ${
-                          product.isActive
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        <select
-                          className="bg-transparent outline-none"
-                          value={product.isActive ? "true" : "false"}
-                          onChange={(e) =>
-                            changeAvailability(
-                              product._id,
-                              e.target.value === "true"
-                            )
-                          }
+                      {changingAvailability &&
+                      changingAvailabilityId === product._id ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        <div
+                          className={`inline-block rounded-full px-2 py-1 ${
+                            product.isActive
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
                         >
-                          <option value="true">Available</option>
-                          <option value="false">Unavailable</option>
-                        </select>
-                      </div>
+                          <select
+                            className="bg-transparent outline-none"
+                            value={product.isActive ? "true" : "false"}
+                            onChange={(e) => {
+                              setChangingAvailabilityId(product._id);
+                              changeAvailability(
+                                product._id,
+                                e.target.value === "true"
+                              );
+                            }}
+                          >
+                            <option value="true">Available</option>
+                            <option value="false">Unavailable</option>
+                          </select>
+                        </div>
+                      )}
                     </td>
                     <td>
-                      <div
-                        className={`inline-block rounded-full px-2 py-1 ${
-                          product.featured
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        <select
-                          className="bg-transparent outline-none"
-                          value={product.featured ? "true" : "false"}
-                          onChange={(e) =>
-                            changeFeaturing(
-                              product._id,
-                              e.target.value === "true"
-                            )
-                          }
+                      {changingFeaturing &&
+                      changingFeaturingId === product._id ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        <div
+                          className={`inline-block rounded-full px-2 py-1 ${
+                            product.featured
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
                         >
-                          <option value="true">Yes</option>
-                          <option value="false">No</option>
-                        </select>
-                      </div>
+                          <select
+                            className="bg-transparent outline-none"
+                            value={product.featured ? "true" : "false"}
+                            onChange={(e) => {
+                              setChangingFeaturingIdId(product._id);
+                              changeFeaturing(
+                                product._id,
+                                e.target.value === "true"
+                              );
+                            }}
+                          >
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                          </select>
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-2 text-right flex gap-2 justify-end">
                       <button
