@@ -23,7 +23,7 @@ export default function AdminUsers() {
         </div>
       ) : (
         <div className="overflow-x-auto bg-base-100 shadow rounded-lg border border-gray-200">
-          <table className="table divide-y divide-gray-200">
+          <table className="min-w-[800px] w-full divide-y divide-gray-200">
             <thead>
               <tr>
                 <th className="px-4 py-2 text-left text-sm font-semibold">
@@ -42,9 +42,9 @@ export default function AdminUsers() {
             <tbody className="divide-y divide-gray-200">
               {allUsers.map((user) => (
                 <tr key={user._id}>
-                  <td className="font-medium">{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>
+                  <td className="px-4 py-2">{user.name}</td>
+                  <td className="px-4 py-2">{user.email}</td>
+                  <td className="px-4 py-2">
                     <span
                       className={`badge ${
                         user.isAdmin ? "badge-primary" : "badge-ghost"
@@ -53,7 +53,7 @@ export default function AdminUsers() {
                       {user.isAdmin ? "Admin" : "User"}
                     </span>
                   </td>
-                  <td>
+                  <td className="px-4 py-2">
                     <button className="btn btn-xs btn-outline">Manage</button>
                   </td>
                 </tr>
