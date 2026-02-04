@@ -97,9 +97,12 @@ const page = () => {
                       >
                         <select
                           className="bg-transparent outline-none"
-                          value={product.isActive}
+                          value={product.isActive ? "true" : "false"}
                           onChange={(e) =>
-                            changeAvailability(product._id, e.target.value)
+                            changeAvailability(
+                              product._id,
+                              e.target.value === "true"
+                            )
                           }
                         >
                           <option value="true">Available</option>
@@ -117,9 +120,12 @@ const page = () => {
                       >
                         <select
                           className="bg-transparent outline-none"
-                          value={product.featured}
+                          value={product.featured ? "true" : "false"}
                           onChange={(e) =>
-                            changeFeaturing(product._id, e.target.value)
+                            changeFeaturing(
+                              product._id,
+                              e.target.value === "true"
+                            )
                           }
                         >
                           <option value="true">Yes</option>
