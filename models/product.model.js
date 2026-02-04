@@ -33,8 +33,13 @@ const ProductSchema=new mongoose.Schema({
 
     isActive: {
       type: Boolean,
-      default: true, // admin can disable product
+      default: true,
     },
+
+    featured:{
+        type:Boolean,
+        default:false
+    }
     
 },{timestamps:true})
 

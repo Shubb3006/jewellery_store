@@ -23,7 +23,7 @@ const useProductStore = create((set) => ({
       products: state.products.map((p) =>
         p._id === updatedProduct._id ? updatedProduct : p
       ),
-    })),  
+    })), 
   
 
 }));

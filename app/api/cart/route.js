@@ -56,7 +56,7 @@ export async function POST(req){
 
         const { productId, quantity = 1 } = await req.json();
 
-        const product = await Product.findById(productId);
+        const product = await Product.findById(productId)
 
         if (!product || !product.isActive) {
             return NextResponse.json(
@@ -72,7 +72,7 @@ export async function POST(req){
             );
           }
 
-        let cart=await Cart.findOne({userId:user._id});
+        let cart=await Cart.findOne({userId:user._id})
         if(!cart){
             cart=await Cart.create({
                 userId:user._id,

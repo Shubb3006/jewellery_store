@@ -14,6 +14,7 @@ export const useAdminStore=create((set)=>({
     updatingOrderStatus:false,
     updatingPaymentStatus:false,
     changingAvailability:false,
+    changingFeaturing:false,
 
     getAllOrders:async()=>{
         try {
@@ -58,17 +59,17 @@ export const useAdminStore=create((set)=>({
 
     editProduct:async(productId,data)=>{
         try {
-            set({isEditngProduct:true});
-            const res=await axiosInstance.put(`/admin/products/${productId}`,data);
-            toast.success("Product Updated")
-            const updatedProduct=res.data.product
-            useProductStore.getState().updateProduct(updatedProduct)
-            return true;
+          set({isEditngProduct:true});
+          const res=await axiosInstance.put(`/admin/products/${productId}`,data);
+          toast.success("Product Updated")
+          const updatedProduct=res.data.product
+          useProductStore.getState().updateProduct(updatedProduct)
+          return true;
         } catch (error) {
-            toast.error(error?.response?.data?.message);
-            console.log(error.message)
+          toast.error(error?.response?.data?.message);
+          console.log(error.message)
         }finally{
-            set({isEditngProduct:false})
+          set({isEditngProduct:false})
         }
     }, 
 
@@ -92,6 +93,7 @@ export const useAdminStore=create((set)=>({
 
     updateOrderStatus: async (orderId, newStatus) => {
         try {
+
           set({ updatingOrderStatus: true });
       
           await axiosInstance.put(
@@ -145,13 +147,74 @@ export const useAdminStore=create((set)=>({
               `/admin/products/${productId}/status`,
               { availability: newAvailability }
             );
-            useProductStore.getState().getAllProducts()
+            // useProductStore.getState().getAllProducts()
+            useProductStore.setState((state) => ({
+              products: state.products.map((product) =>
+                product._id === productId
+                  ? { ...product, isActive: newAvailability }
+                  : product
+              ),
+            }));
+
+            toast.success("Availability changes successfully")
            
             // update UI without refetching all orders
           } catch (error) {
-            toast.error("Failed to update Payment status");
+            toast.error(error?.response?.data?.message||"Failed to Change Availability status");
           } finally {
             set({ changingAvailability: false });
           }
-        },
+      },
+
+      changeFeaturing:async(productId,newFeatured)=>{
+        try {
+            set({ changingFeaturing: true });
+        
+            await axiosInstance.put(
+              `/admin/products/${productId}/featured`,
+              { isFeatured: newFeatured }
+            );
+            // useProductStore.getState().getAllProducts()
+            useProductStore.setState((state) => ({
+              products: state.products.map((product) =>
+                product._id === productId
+                  ? { ...product, featured: newFeatured }
+                  : product
+              ),
+            }));
+
+            toast.success("Featuring changes successfully")
+           
+            // update UI without refetching all orders
+          } catch (error) {
+            toast.error(error?.response?.data?.message||"Failed to Change Featuring status");
+          } finally {
+            set({ changingFeaturing: false });
+          }
+      },
+
+    uploadImages: async (files) => {
+      try {
+        set({isAddingProduct:true});
+        const uploadedUrls = [];
+    
+        for (const file of files) {
+          const formData = new FormData();
+          formData.append("image", file);
+    
+          const res = await axiosInstance.post("/admin/products/upload", formData);
+    
+          uploadedUrls.push(res.data.url);
+        }
+    
+        return uploadedUrls;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+      finally{
+        set({isAddingProduct:false});
+      }
+    },
+        
 }))

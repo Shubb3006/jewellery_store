@@ -1,3 +1,4 @@
+//add product
 import { requireAdmin } from "@/lib/checkAdmin";
 import { connectDB } from "@/lib/db";
 import productModel from "@/models/product.model";
@@ -9,9 +10,9 @@ export async function POST(req) {
     await requireAdmin(req)
     const body = await req.json();
       
-    if (!body.name || !body.price) {
+    if (!body.name || !body.price || !body.images?.length || !body.stock) {
       return NextResponse.json(
-        { status: "error", message: "Name and Price are required" },
+        { status: "error", message: "Name, Price, Stock & Images are required" },
         { status: 400 }
       );
     }

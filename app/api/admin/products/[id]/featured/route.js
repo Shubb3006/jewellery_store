@@ -9,15 +9,15 @@ export async function PUT(req,{params}){
     try{
       await requireAdmin(req);
       const {id}=await params;
-      const {availability}=await req.json();
+      const {isFeatured}=await req.json();
       if(!id)
         return NextResponse.json({status:"error",message:"No Product is selected"},{status:401})
   
       const product=await Product.findByIdAndUpdate(id, {
-        isActive: availability
+        featured: isFeatured
       });
       return NextResponse.json(
-        { status: "success", message:" Product Deleted"},
+        { status: "success", message:"Featued changed"},
       );
     }
     catch(err){

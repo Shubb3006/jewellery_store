@@ -3,7 +3,6 @@
 import { useCartStore } from "@/store/useCartStore";
 import useProductStore from "@/store/useProductStore";
 import { Loader2, Minus, Plus, ShoppingCart } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -39,41 +38,21 @@ export default function Home() {
     setChangingQuantityId(null);
   };
 
-  const featuedProducts = products.filter((p) => p.featured === true);
-  console.log(featuedProducts);
-  console.log(products);
-  console.log(cart);
-
   return (
     <div className="min-h-[calc(100vh-64px)]">
-      {/* HERO SECTION */}
-      <section className="bg-base-200 py-20 px-6 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold">
-          Shop Smart. Shop Fast.
-        </h1>
-        <p className="mt-4 text-gray-500 max-w-xl mx-auto">
-          Discover quality products at the best prices. Delivered right to your
-          doorstep.
-        </p>
-        <Link href="/products" className="btn btn-primary mt-6">
-          <ShoppingCart size={18} />
-          Start Shopping
-        </Link>
-      </section>
-
       {/* PRODUCTS SECTION */}
       <section className="p-6 max-w-7xl mx-auto">
-        <h2 className="text-2xl font-semibold mb-6">Featured Products</h2>
+        <h2 className="text-2xl font-semibold mb-6">All Products</h2>
 
         {gettingAllProducts ? (
           <div className="flex items-center justify-center min-h-[300px]">
             <Loader2 className="animate-spin" size={32} />
           </div>
-        ) : featuedProducts.length === 0 ? (
+        ) : products.length === 0 ? (
           <p className="text-center text-gray-500">No products available</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {featuedProducts.map((p) => {
+            {products.map((p) => {
               const isUnavailable = !p || p.isActive === false || p.stock === 0;
               const cartItem = cart.find(
                 (item) =>

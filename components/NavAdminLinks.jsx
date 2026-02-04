@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Box, Users, Package } from "lucide-react";
+import { Home, Box, Users, Package, Warehouse, Layers } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,7 +8,7 @@ const navItems = [
   { label: "Dashboard", href: "/admin", icon: Home },
   { label: "Orders", href: "/admin/orders", icon: Box },
   { label: "Users", href: "/admin/users", icon: Users },
-  { label: "Products", href: "/admin/products", icon: Package },
+  { label: "Products", href: "/admin/products", icon: Layers },
 ];
 
 const ITEM_HEIGHT = 44; // must match link height

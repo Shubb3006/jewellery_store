@@ -45,6 +45,7 @@ const Page = () => {
     setDeletingId(null);
   }
 
+  console.log(cart);
   async function handleCheckOut() {
     const success = await checkOut();
     if (success) router.push("/orders");
@@ -70,7 +71,7 @@ const Page = () => {
           </div>
         ) : (
           cart.map((item) => {
-            const product = item.productId;
+            const product = item?.productId;
 
             const isUnavailable =
               item.unavailable ||
@@ -78,7 +79,7 @@ const Page = () => {
               product.isActive === false ||
               product.stock === 0;
 
-            const outOfStock = item.quantity > product.stock;
+            const outOfStock = item.quantity > product?.stock;
 
             return (
               <div
@@ -190,7 +191,8 @@ const Page = () => {
         <div className="flex justify-between mb-4">
           <span>Total Price</span>
           <span className="font-bold">
-            ₹{cart.reduce((acc, i) => acc + i.productId.price * i.quantity, 0)}
+            ₹
+            {cart.reduce((acc, i) => acc + i.productId?.price * i?.quantity, 0)}
           </span>
         </div>
 
