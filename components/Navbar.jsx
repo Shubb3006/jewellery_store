@@ -24,7 +24,7 @@ const Navbar = () => {
   }
   if (pathname.startsWith("/admin")) return null;
   return (
-    <div className="navbar bg-base-100 shadow-md sticky top-0 z-50 px-6">
+    <div className="navbar bg-base-200 shadow-md sticky top-0 z-50 px-6">
       {/* LEFT */}
       <div className="navbar-start">
         <Link href="/" className="text-xl font-bold">

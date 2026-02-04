@@ -115,7 +115,7 @@ export default function Home() {
                   {/* ACTION AREA (NOT CLICKABLE FOR NAVIGATION) */}
                   <div className="px-4 pb-4">
                     {cartItem ? (
-                      <div className="flex items-center justify-between rounded-lg px-3 py-1">
+                      <div className="flex items-center justify-center gap-4 rounded-lg px-3 py-1">
                         <button
                           onClick={() => handleDec(p)}
                           disabled={changingQuantityId === p._id}

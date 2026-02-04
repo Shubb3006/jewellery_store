@@ -118,7 +118,7 @@ const Page = () => {
         {/* ACTION BUTTONS */}
         <div className="flex flex-col sm:flex-row gap-3 mt-4">
           {cartItem ? (
-            <div className="px-2 gap-3 flex items-center justify-between  rounded-lg">
+            <div className="px-2 gap-3 flex items-center justify-start gap-3 rounded-lg">
               <button
                 onClick={() => handleDec(product)}
                 disabled={isChangingQuantity}
