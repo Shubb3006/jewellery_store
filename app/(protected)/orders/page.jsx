@@ -28,9 +28,15 @@ const OrdersPage = () => {
     getOrders();
   }, []);
 
-  {gettingOrders && <Loader2 className="animate-spin w-6 h-6" />;}
+  if (gettingOrders) {
+    return (
+      <div className="flex justify-center items-center min-h-[calc(100vh-64px)]">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
+  }
 
-  if (orders.length === 0) {
+  if (!gettingOrders && orders.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <p className="text-xl font-semibold">No orders yet 🛒</p>
