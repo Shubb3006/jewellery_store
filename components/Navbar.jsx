@@ -80,6 +80,9 @@ const Navbar = () => {
                 <Link href="/orders">My Orders</Link>
               </li>
               <li>
+                <Link href="/addresses">My Addresses</Link>
+              </li>
+              <li>
                 <button onClick={logout} className="text-error font-medium">
                   Logout
                 </button>

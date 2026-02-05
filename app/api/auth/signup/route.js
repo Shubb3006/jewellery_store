@@ -50,7 +50,6 @@ export async function POST(req,res){
               name: user.name,
               email: user.email,
               isAdmin:user.isAdmin
-
             },
           });
             generateToken(user._id,res);

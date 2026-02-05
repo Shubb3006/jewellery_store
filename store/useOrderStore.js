@@ -8,7 +8,7 @@ export const useOrderStore = create((set) => ({
   getOrders: async () => {
     set({ gettingOrders: true });
     try {
-      const res = await axiosInstance.get("/orders");
+      const res = await axiosInstance.get("/user/orders");
       set({ orders: res.data.orders });
     } catch (error) {
     } finally {

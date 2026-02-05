@@ -10,6 +10,8 @@ export const useAuthStore=create((set,get)=>({
     isLoggingIn:false,
     isSigningUp:false,
     isLoggingOut:false,
+   
+
     checkAuth: async () => {
         set({ isCheckingAuth: true });
         try {
@@ -53,7 +55,7 @@ export const useAuthStore=create((set,get)=>({
 
           const guestItems = getGuestCart();
           if (guestItems.length > 0) {
-            await axiosInstance.post("/cart/merge", {
+            await axiosInstance.post("/user/cart/merge", {
               items: guestItems,
             });
       
@@ -84,5 +86,7 @@ export const useAuthStore=create((set,get)=>({
           } finally {
             set({isLoggingOut:false})
           }
-      }
+      },
+
+   
 }))

@@ -4,7 +4,7 @@ import {toast} from "react-hot-toast"
 import { useAuthStore } from "./useAuthStore";
 import { addToGuestCart, deleteItemGuestCart, getGuestCart, removeFromGuestCart, updateGuestCartQuantity } from "@/lib/guestCart";
 
-export const useCartStore=create((set,get)=>({
+export const useCartStore=create((set)=>({
     cart:[],
     gettingCartItems:false,
     isAddingItem:false,
@@ -15,7 +15,7 @@ export const useCartStore=create((set,get)=>({
         try {
             set({gettingCartItems:true});
             if(useAuthStore.getState().authUser){
-                const res=await axiosInstance.get("/cart");
+                const res=await axiosInstance.get("/user/cart");
                 set({cart:res.data.cart.items});
             }
             else{
@@ -38,7 +38,7 @@ export const useCartStore=create((set,get)=>({
           set({ isAddingItem: true });
       
           if (useAuthStore.getState().authUser) {
-            const res = await axiosInstance.post("/cart", {
+            const res = await axiosInstance.post("/user/cart", {
               productId: product._id,
             });
             set({ cart: res.data.cart.items });
@@ -59,7 +59,7 @@ export const useCartStore=create((set,get)=>({
         try {
             set({isChangingQuantity:true});
             if (useAuthStore.getState().authUser) {
-                const res=await axiosInstance.put("/cart",{productId:product._id,action})
+                const res=await axiosInstance.put("/user/cart",{productId:product._id,action})
                 set({cart:res.data.updatedCart.items})
             }
             else{
@@ -79,7 +79,7 @@ export const useCartStore=create((set,get)=>({
         try {
             set({isDeleting:true});
             if (useAuthStore.getState().authUser) {
-                const res=await axiosInstance.delete(`/cart/${product._id}`)
+                const res=await axiosInstance.delete(`/user/cart/${product._id}`)
                 set({cart:res.data.updatedCart.items})
             }
             else{

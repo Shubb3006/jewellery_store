@@ -11,7 +11,7 @@ export const useCheckoutStore = create((set) => ({
     set({ isCheckingOut: true });
 
     try {
-      const res = await axiosInstance.post("/orders");
+      const res = await axiosInstance.post("/user/orders");
       useCartStore.getState().clearCart();
       toast.success("Order placed successfully 🎉");
 
