@@ -79,6 +79,8 @@ export default function Home() {
                 (item) =>
                   item.productId?._id === p._id || item.productId === p._id
               );
+              const isMaxStockReached =
+                cartItem && cartItem.quantity >= p.stock;
 
               return (
                 <div
@@ -113,25 +115,27 @@ export default function Home() {
                   </Link>
 
                   {/* ACTION AREA (NOT CLICKABLE FOR NAVIGATION) */}
-                  <div className="px-4 pb-4">
+                  <div className="px-4 pb-4 flex justify-center">
                     {cartItem ? (
-                      <div className="flex items-center justify-center gap-4 rounded-lg px-3 py-1">
+                      <div className="flex items-center gap-3 border px-1 py-1 rounded-lg">
                         <button
                           onClick={() => handleDec(p)}
                           disabled={changingQuantityId === p._id}
-                          className="btn btn-primary btn-sm"
+                          className="btn btn-sm"
                         >
                           <Minus size={16} />
                         </button>
 
-                        <span className="font-semibold text-base">
+                        <span className="font-semibold text-base min-w-[24px] text-center">
                           {cartItem.quantity}
                         </span>
 
                         <button
                           onClick={() => handleInc(p)}
-                          disabled={changingQuantityId === p._id}
-                          className="btn btn-primary btn-sm"
+                          disabled={
+                            isMaxStockReached || changingQuantityId === p._id
+                          }
+                          className={`btn btn-sm`}
                         >
                           <Plus size={16} />
                         </button>

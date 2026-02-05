@@ -116,25 +116,27 @@ const Page = () => {
         <p className="text-gray-600 leading-relaxed">{product.description}</p>
 
         {/* ACTION BUTTONS */}
-        <div className="flex flex-col sm:flex-row gap-3 mt-4">
+        <div className="flex flex-row gap-3 mt-4">
           {cartItem ? (
-            <div className="px-2 gap-3 flex items-center justify-start gap-3 rounded-lg">
+            <div className="flex items-center gap-3 border px-1 rounded-lg">
               <button
                 onClick={() => handleDec(product)}
                 disabled={isChangingQuantity}
-                className="btn btn-primary btn-sm"
+                className="btn btn-sm"
               >
                 <Minus size={16} />
               </button>
 
-              <span className="font-semibold text-base">
+              <span className="font-semibold text-base min-w-[24px] text-center">
                 {cartItem.quantity}
               </span>
 
               <button
                 onClick={() => handleInc(product)}
                 disabled={isMaxStockReached || isChangingQuantity}
-                className="btn btn-primary btn-sm"
+                className={`btn btn-sm ${
+                  isMaxStockReached ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               >
                 <Plus size={16} />
               </button>
@@ -143,7 +145,7 @@ const Page = () => {
             <button
               disabled={isOutOfStock || isAddingItem}
               onClick={() => handleAddingProduct(product)}
-              className="btn btn-primary rounded-lg"
+              className="btn btn-primary rounded-lg flex gap-2"
             >
               {isAddingItem ? (
                 <Loader2 className="animate-spin" size={18} />
