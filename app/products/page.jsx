@@ -85,7 +85,7 @@ export default function Home() {
                     </div>
 
                     <div className="p-4">
-                      <h2 className="text-sm font-medium line-clamp-2 min-h-[40px]">
+                      <h2 className="text-sm font-medium line-clamp-2 min-h-[40px] group-hover:underline group-hover:text-primary transition">
                         {p.name}
                       </h2>
 

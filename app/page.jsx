@@ -45,9 +45,9 @@ export default function Home() {
   console.log(cart);
 
   return (
-    <div className="min-h-[calc(100vh-64px)]">
+    <div className="min-h-[calc(100vh-64px)] ">
       {/* HERO SECTION */}
-      <section className="bg-base-200 py-20 px-6 text-center">
+      <section className="bg-base-200 py-20 px-6 text-center ">
         <h1 className="text-4xl md:text-5xl font-bold">
           Shop Smart. Shop Fast.
         </h1>
@@ -106,7 +106,7 @@ export default function Home() {
                     </div>
 
                     <div className="p-4">
-                      <h2 className="text-sm font-medium line-clamp-2 min-h-[40px]">
+                      <h2 className="text-sm font-medium line-clamp-2 min-h-[40px] group-hover:underline group-hover:text-primary transition">
                         {p.name}
                       </h2>
 

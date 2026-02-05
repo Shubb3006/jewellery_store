@@ -1,7 +1,7 @@
 "use client";
 
 import { useCartStore } from "@/store/useCartStore";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Loader2, Minus, Plus } from "lucide-react";
 import { useCheckoutStore } from "@/store/useCheckOutStore";
 import { useRouter } from "next/navigation";
@@ -59,6 +59,17 @@ const Page = () => {
       </div>
     );
   }
+
+  const { totalQuantity, totalAmount } = useMemo(() => {
+    return cart.reduce(
+      (acc, i) => {
+        acc.totalQuantity += i.quantity;
+        acc.totalAmount += (i.productId?.price || 0) * i.quantity;
+        return acc;
+      },
+      { totalQuantity: 0, totalAmount: 0 }
+    );
+  }, [cart]);
 
   return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -186,18 +197,12 @@ const Page = () => {
 
         <div className="flex justify-between mb-2">
           <span>Total Items</span>
-          <span>{cart.reduce((acc, i) => acc + i.quantity, 0)}</span>
+          <span>{totalQuantity}</span>
         </div>
 
         <div className="flex justify-between mb-4">
           <span>Total Price</span>
-          <span className="font-bold">
-            ₹
-            {cart.reduce(
-              (acc, i) => acc + (i.productId?.price || 0) * i.quantity,
-              0
-            )}
-          </span>
+          <span className="font-bold">₹{totalAmount}</span>
         </div>
 
         <button

@@ -148,7 +148,7 @@ const Page = () => {
               className="btn btn-primary rounded-lg flex gap-2"
             >
               {isAddingItem ? (
-                <Loader2 className="animate-spin" size={18} />
+                <Loader2 className="animate-spin min-w-[108px]" size={18} />
               ) : (
                 <>
                   <ShoppingCart size={16} />
