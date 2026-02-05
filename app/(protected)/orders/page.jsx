@@ -28,9 +28,8 @@ const OrdersPage = () => {
     getOrders();
   }, []);
 
-  {
-    gettingOrders && <Loader2 className="animate-spin w-6 h-6" />;
-  }
+  {gettingOrders && <Loader2 className="animate-spin w-6 h-6" />;}
+
   if (orders.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">

@@ -4,7 +4,10 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useRouter, useSearchParams } from "next/navigation";
+import {
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 
 const Login = () => {
   const router = useRouter();
@@ -153,7 +156,10 @@ const Login = () => {
 
             <p className="text-center text-sm">
               New User?
-              <Link href="/signup" className="link link-primary ml-1">
+              <Link
+                href={`signup?redirect=${redirectTo}`}
+                className="link link-primary ml-1"
+              >
                 Sign Up
               </Link>
             </p>

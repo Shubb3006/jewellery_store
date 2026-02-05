@@ -39,7 +39,8 @@ const useProductStore = create((set) => ({
         set({gettingProduct:false})
 
       }
-   } 
+   } ,
+   
 
 }));
 

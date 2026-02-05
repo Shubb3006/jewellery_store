@@ -5,12 +5,17 @@ import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import CartButton from "./CartButton";
 import { Loader2 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ThemeToggle from "./ThemeToggler";
 
 const Navbar = () => {
   const pathname = usePathname();
+  let toNavi = true;
+  if (pathname === "/login" || pathname === "/signup" || pathname === "/")
+    toNavi = false;
+  const searchParams = useSearchParams();
   const { authUser, logout, isCheckingAuth } = useAuthStore();
+  const router = useRouter();
 
   if (isCheckingAuth) {
     return (
@@ -44,9 +49,19 @@ const Navbar = () => {
         <CartButton />
 
         {!authUser ? (
-          <Link href="/login" className="btn btn-primary btn-sm sm:btn-md">
-            Login
-          </Link>
+          <button
+            onClick={() => {
+              toNavi && router.replace(`/login?redirect=${pathname}`);
+            }}
+          >
+            <Link
+              disabled={pathname.startsWith("/login")}
+              href="/login"
+              className="btn btn-primary btn-sm sm:btn-md"
+            >
+              Login
+            </Link>
+          </button>
         ) : (
           <div className="dropdown dropdown-end">
             <label

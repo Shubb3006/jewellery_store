@@ -40,9 +40,6 @@ export default function Home() {
   };
 
   const featuedProducts = products.filter((p) => p.featured === true);
-  console.log(featuedProducts);
-  console.log(products);
-  console.log(cart);
 
   return (
     <div className="min-h-[calc(100vh-64px)] ">

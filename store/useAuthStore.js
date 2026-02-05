@@ -36,6 +36,7 @@ export const useAuthStore=create((set,get)=>({
           }
           useCartStore.getState().getCart();
           toast.success("Signup Successfull");
+          return true;
         } catch (error) {
             toast.error(error?.response?.data?.message);
             console.log(error)
@@ -60,7 +61,7 @@ export const useAuthStore=create((set,get)=>({
           }
           useCartStore.getState().getCart();
           toast.success("Login Successfull");
-
+          
           return true
 
         } catch (error) {
@@ -71,17 +72,17 @@ export const useAuthStore=create((set,get)=>({
         }
       },
 
-      logout: async () => {
-        set({isLoggingOut:true})
-        try {
-          const res = await axiosInstance.post("/auth/logout");
-          set({ authUser: null,hasCheckedAuth:false });
-
-          toast.success("Logout Success");
-        } catch (error) {
-          console.log(error.message);
-        } finally {
-          set({isLoggingOut:false})
-        }
-    }
+        logout: async () => {
+          set({isLoggingOut:true})
+          try {
+            const res = await axiosInstance.post("/auth/logout");
+            set({ authUser: null,hasCheckedAuth:false });
+            useCartStore.getState().clearCart()
+            toast.success("Logout Success");
+          } catch (error) {
+            console.log(error.message);
+          } finally {
+            set({isLoggingOut:false})
+          }
+      }
 }))

@@ -4,8 +4,12 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/store/useAuthStore";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const Page = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -73,7 +77,10 @@ const Page = () => {
       toast.error("Please fix the errors");
       return;
     }
-    await signup(formData);
+    const success = await signup(formData);
+    if (success) {
+      router.replace(redirectTo);
+    }
 
     setFormData({ email: "", password: "", name: "" });
   }
@@ -179,7 +186,10 @@ const Page = () => {
 
             <p className="text-center text-sm">
               Already have an account?
-              <Link href="/login" className="link link-primary ml-1">
+              <Link
+                href={`login?redirect=${redirectTo}`}
+                className="link link-primary ml-1"
+              >
                 Login
               </Link>
             </p>
