@@ -1,5 +1,6 @@
 "use client";
 
+import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 import { useCartStore } from "@/store/useCartStore";
 import useProductStore from "@/store/useProductStore";
 import { Loader2, ShoppingCart, Heart, Minus, Plus } from "lucide-react";
@@ -27,11 +28,7 @@ const Page = () => {
   }, [id]);
 
   if (gettingProduct || gettingCartItems) {
-    return (
-      <div className="min-h-[calc(100vh-64px)] flex justify-center items-center">
-        <Loader2 className="animate-spin w-8 h-8" />
-      </div>
-    );
+    return <ProductSkeleton />;
   }
 
   if (!product) {

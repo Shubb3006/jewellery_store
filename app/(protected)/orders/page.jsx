@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useOrderStore } from "@/store/useOrderStore";
 import { Loader2 } from "lucide-react";
+import MyOrderSkeleton from "@/components/skeletons/MyOrderSkeleton";
 
 const orderStatusStyles = {
   PLACED: "bg-yellow-100 text-yellow-700",
@@ -23,17 +24,21 @@ const paymentMethodStyles = {
 };
 const OrdersPage = () => {
   const { orders, gettingOrders, getOrders } = useOrderStore();
+  const [showSkeleton, setShowSkeleton] = useState(true);
 
   useEffect(() => {
     getOrders();
   }, []);
 
+  useEffect(() => {
+    if (!gettingOrders) {
+      const t = setTimeout(() => setShowSkeleton(false), 300);
+      return () => clearTimeout(t);
+    }
+  }, [gettingOrders]);
+
   if (gettingOrders) {
-    return (
-      <div className="flex justify-center items-center min-h-[calc(100vh-64px)]">
-        <Loader2 className="animate-spin" />
-      </div>
-    );
+    return <MyOrderSkeleton />;
   }
 
   if (!gettingOrders && orders.length === 0) {

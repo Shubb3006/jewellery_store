@@ -6,6 +6,7 @@ import { Loader2, Minus, Plus } from "lucide-react";
 import { useCheckoutStore } from "@/store/useCheckOutStore";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
+import CartSkeleton from "@/components/skeletons/CartSkeleton";
 
 const Page = () => {
   const router = useRouter();
@@ -53,11 +54,7 @@ const Page = () => {
   };
 
   if (gettingCartItems) {
-    return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <Loader2 className="animate-spin w-8 h-8" />
-      </div>
-    );
+    return <CartSkeleton />;
   }
 
   const { totalQuantity, totalAmount } = useMemo(() => {

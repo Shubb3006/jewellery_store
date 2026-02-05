@@ -1,17 +1,22 @@
 "use client";
 
+import ProductsSkeleton from "@/components/skeletons/ProductsSkeleton";
 import { useCartStore } from "@/store/useCartStore";
 import useProductStore from "@/store/useProductStore";
 import { Loader2, Minus, Plus, ShoppingCart } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const router = useRouter();
   const { getAllProducts, products, gettingAllProducts } = useProductStore();
-  const { addToCart, getCart, cart, isAddingItem, changeQuantity } =
-    useCartStore();
+  const {
+    addToCart,
+    gettingCartItems,
+    getCart,
+    cart,
+    isAddingItem,
+    changeQuantity,
+  } = useCartStore();
   const [addingProductId, setAddingProductId] = useState(null);
   const [changingQuantityId, setChangingQuantityId] = useState(null);
 
@@ -37,6 +42,8 @@ export default function Home() {
     await changeQuantity({ product, action: "dec" });
     setChangingQuantityId(null);
   };
+
+  if (gettingAllProducts || gettingCartItems) return <ProductsSkeleton />;
 
   return (
     <div className="min-h-[calc(100vh-64px)]">
@@ -64,9 +71,8 @@ export default function Home() {
               return (
                 <div
                   key={p._id}
-                  className="group relative rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+                  className="group relative rounded-xl border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                 >
-                  {/* CLICKABLE PART */}
                   <Link href={`/products/${p._id}`}>
                     <div className="relative h-52 overflow-hidden cursor-pointer">
                       <img

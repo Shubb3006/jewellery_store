@@ -1,5 +1,6 @@
 "use client";
 
+import ProductsSkeleton from "@/components/skeletons/ProductsSkeleton";
 import { useCartStore } from "@/store/useCartStore";
 import useProductStore from "@/store/useProductStore";
 import { Loader2, Minus, Plus, ShoppingCart } from "lucide-react";
@@ -8,8 +9,14 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const { getAllProducts, products, gettingAllProducts } = useProductStore();
-  const { addToCart, getCart, cart, isAddingItem, changeQuantity } =
-    useCartStore();
+  const {
+    addToCart,
+    gettingCartItems,
+    getCart,
+    cart,
+    isAddingItem,
+    changeQuantity,
+  } = useCartStore();
   const [addingProductId, setAddingProductId] = useState(null);
   const [changingQuantityId, setChangingQuantityId] = useState(null);
 
@@ -62,10 +69,8 @@ export default function Home() {
       <section className="p-6 max-w-7xl mx-auto">
         <h2 className="text-2xl font-semibold mb-6">Featured Products</h2>
 
-        {gettingAllProducts ? (
-          <div className="flex items-center justify-center min-h-[300px]">
-            <Loader2 className="animate-spin" size={32} />
-          </div>
+        {gettingAllProducts || gettingCartItems ? (
+          <ProductsSkeleton />
         ) : featuedProducts.length === 0 ? (
           <p className="text-center text-gray-500">No products available</p>
         ) : (
@@ -82,7 +87,7 @@ export default function Home() {
               return (
                 <div
                   key={p._id}
-                  className="group relative rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+                  className="group relative rounded-xl border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                 >
                   {/* CLICKABLE PART */}
                   <Link href={`/products/${p._id}`}>
