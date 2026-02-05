@@ -1,4 +1,5 @@
 import axiosInstance from "@/lib/axios";
+import toast from "react-hot-toast";
 import { create } from "zustand";
 
 export const useAddressStore=create((set)=>({
@@ -6,6 +7,7 @@ export const useAddressStore=create((set)=>({
     gettingAddresses:false,
     addingAddress:false,
     isDeletingAddress:false,
+    isEditingAddress:false,
 
     getAddresses:async()=>{
         set({gettingAddresses:true})
@@ -27,7 +29,7 @@ export const useAddressStore=create((set)=>({
           set({ addresses: res.data.addresses });
           
         } catch (error) {
-          console.log(error.message);
+          toast.error(error?.response?.data?.message);
         } finally {
           set({addingAddress:false})
         }
@@ -47,4 +49,16 @@ export const useAddressStore=create((set)=>({
         }
       },
       
+    editAddress:async(addressId,data)=>{
+      set({isEditingAddress:true})
+        try {
+          const res = await axiosInstance.put(`/user/addresses/${addressId}`,data);
+          set({ addresses: res.data.addresses });
+          toast.success("Address Edit Successfull")
+        } catch (error) {
+          toast.error(error?.response?.data?.message);
+        } finally {
+          set({isEditingAddress:false})
+        }
+    }
 }))

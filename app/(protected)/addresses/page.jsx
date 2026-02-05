@@ -3,13 +3,14 @@ import { useAddressStore } from "@/store/useAddressStore";
 import React, { useEffect, useState } from "react";
 import { Loader2, Edit2, Trash2, Plus } from "lucide-react";
 import AddAddressModal from "../../../components/modals/AddAddressModal";
+import EditAddressModal from "@/components/modals/EditAddressModal";
 
 const AddressesPage = () => {
   const { getAddresses, addresses, gettingAddresses, deleteAddress } =
     useAddressStore();
-  console.log(addresses);
 
   const [showAddForm, setShowAddForm] = useState(false);
+  const [editingAddress, setEditingAddress] = useState(false);
 
   useEffect(() => {
     getAddresses();
@@ -59,7 +60,12 @@ const AddressesPage = () => {
                 )}
               </div>
               <div className="flex gap-2">
-                <button className="btn btn-outline btn-sm flex items-center gap-1">
+                <button
+                  className="btn btn-outline btn-sm flex items-center gap-1"
+                  onClick={() => {
+                    setEditingAddress(address);
+                  }}
+                >
                   <Edit2 size={14} />
                   Edit
                 </button>
@@ -80,6 +86,12 @@ const AddressesPage = () => {
       <div className="mt-6">
         {showAddForm && (
           <AddAddressModal onClose={() => setShowAddForm(false)} />
+        )}
+        {editingAddress && (
+          <EditAddressModal
+            address={editingAddress}
+            onClose={() => setEditingAddress(null)}
+          />
         )}
       </div>
     </div>
