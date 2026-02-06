@@ -56,7 +56,11 @@ export async function POST(req){
             { status: 404 }
           );
         }
+        if(userDoc.addresses.length===0){
+            body.isDefault=true;
+        }
         if(body.isDefault) userDoc.addresses.forEach((addr) => (addr.isDefault = false));
+
         userDoc.addresses.push(body);
         await userDoc.save() // return empty array if none
     
