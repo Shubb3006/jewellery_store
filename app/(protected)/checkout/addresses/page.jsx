@@ -7,31 +7,27 @@ import AddressList from "@/components/AdddressList";
 import { useCheckoutStore } from "@/store/useCheckOutStore";
 import { redirect, useRouter } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
+import AddressesSkeleton from "@/components/skeletons/AddressSkeleton";
 
 const AddressesPage = () => {
   const { getAddresses, addresses, gettingAddresses } = useAddressStore();
-  const { cart, getCart, gettingCartItems } = useCartStore();
+  const { cart, getCart, gettingCartItems, cartLoad } = useCartStore();
 
   const { selectedAddress, setSelectedAddress } = useCheckoutStore();
   const router = useRouter();
 
   const [showAddForm, setShowAddForm] = useState(false);
-  //   const [selectedAddress, setSelectedAddress] = useState(null);
 
   useEffect(() => {
     getAddresses();
     getCart();
   }, []);
 
-  if (gettingAddresses || gettingCartItems) {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
+  if (!cartLoad || gettingAddresses) {
+    return <AddressesSkeleton />;
   }
 
-  if (!gettingCartItems && cart.length === 0) {
+  if (cartLoad && cart.length === 0) {
     redirect("/cart");
   }
 
@@ -48,11 +44,7 @@ const AddressesPage = () => {
         </button>
       </div>
 
-      {gettingAddresses ? (
-        <div className="flex justify-center items-center min-h-[200px]">
-          <Loader2 className="animate-spin w-8 h-8" />
-        </div>
-      ) : addresses.length === 0 ? (
+      {gettingAddresses && addresses.length === 0 ? (
         <p className="text-gray-500 text-center">No addresses added yet.</p>
       ) : (
         <AddressList

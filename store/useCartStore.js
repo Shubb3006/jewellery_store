@@ -6,6 +6,7 @@ import { addToGuestCart, deleteItemGuestCart, getGuestCart, removeFromGuestCart,
 
 export const useCartStore=create((set)=>({
     cart:[],
+    cartLoad:false,
     gettingCartItems:false,
     isAddingItem:false,
     isChangingQuantity:false,
@@ -29,7 +30,7 @@ export const useCartStore=create((set)=>({
         } catch (error) {
             toast.error(error?.response?.data?.message || error.message);    
         }finally{
-            set({gettingCartItems:false})
+            set({gettingCartItems:false, cartLoad:true})
         }
     },
 

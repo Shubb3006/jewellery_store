@@ -5,6 +5,7 @@ import { Loader2, Plus } from "lucide-react";
 import AddAddressModal from "../../../components/modals/AddAddressModal";
 import EditAddressModal from "@/components/modals/EditAddressModal";
 import AddressList from "@/components/AdddressList";
+import AddressesSkeleton from "@/components/skeletons/AddressSkeleton";
 
 const AddressesPage = () => {
   const { getAddresses, addresses, gettingAddresses, deleteAddress } =
@@ -16,6 +17,8 @@ const AddressesPage = () => {
   useEffect(() => {
     getAddresses();
   }, []);
+
+  if(gettingAddresses) return <AddressesSkeleton />
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -30,11 +33,8 @@ const AddressesPage = () => {
         </button>
       </div>
 
-      {gettingAddresses ? (
-        <div className="flex justify-center items-center min-h-[200px]">
-          <Loader2 className="animate-spin w-8 h-8" />
-        </div>
-      ) : addresses.length === 0 ? (
+      {!gettingAddresses 
+      && addresses.length === 0  ?(
         <p className="text-gray-500 text-center">No addresses added yet.</p>
       ) : (
         <AddressList

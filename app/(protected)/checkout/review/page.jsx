@@ -4,11 +4,12 @@ import { useCheckoutStore } from "@/store/useCheckOutStore";
 import { useCartStore } from "@/store/useCartStore";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ReviewSkeleton from "@/components/skeletons/ReviewPageSkeleton";
 
 const ReviewPage = () => {
   const router = useRouter();
   const { selectedAddress, checkOut } = useCheckoutStore();
-  const { cart, getCart, gettingCartItems } = useCartStore();
+  const { cartLoad, cart, getCart, gettingCartItems } = useCartStore();
   useEffect(() => {
     getCart();
   }, []);
@@ -25,12 +26,7 @@ const ReviewPage = () => {
   const deliveryFee = subtotal > 999 ? 0 : 49;
   const total = subtotal + deliveryFee;
 
-  if (gettingCartItems)
-    return (
-      <div>
-        <p>Loading....</p>
-      </div>
-    );
+  if (!cartLoad) return <ReviewSkeleton />;
 
   if (!gettingCartItems && cart.length === 0) {
     redirect("/cart");
@@ -137,7 +133,7 @@ const ReviewPage = () => {
           className="btn btn-primary w-full mt-4"
           onClick={async () => {
             // CALL PLACE ORDER API HERE
-            await checkOut({paymentMethod});
+            await checkOut({ paymentMethod });
             router.push("/orders");
           }}
         >
