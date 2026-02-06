@@ -1,15 +1,17 @@
 "use client";
 import { useAddressStore } from "@/store/useAddressStore";
 import React, { useEffect, useState } from "react";
-import { Loader2, Edit2, Trash2, Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import AddAddressModal from "@/components/modals/AddAddressModal";
 import AddressList from "@/components/AdddressList";
 import { useCheckoutStore } from "@/store/useCheckOutStore";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { useCartStore } from "@/store/useCartStore";
 
 const AddressesPage = () => {
-  const { getAddresses, addresses, gettingAddresses, deleteAddress } =
-    useAddressStore();
+  const { getAddresses, addresses, gettingAddresses } = useAddressStore();
+  const { cart, getCart, gettingCartItems } = useCartStore();
+
   const { selectedAddress, setSelectedAddress } = useCheckoutStore();
   const router = useRouter();
 
@@ -18,7 +20,20 @@ const AddressesPage = () => {
 
   useEffect(() => {
     getAddresses();
+    getCart();
   }, []);
+
+  if (gettingAddresses || gettingCartItems) {
+    return (
+      <div>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (!gettingCartItems && cart.length === 0) {
+    redirect("/cart");
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6">
