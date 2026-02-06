@@ -7,6 +7,7 @@ import { getUserFromCookie } from "@/lib/auth";
 
 export async function POST(req) {
   await connectDB();
+  try{
 
   const user = await getUserFromCookie(req);
   if (!user) {
@@ -59,4 +60,12 @@ export async function POST(req) {
     success: true,
     cart: updatedCart,
   });
+}
+catch(err){
+  console.log(err.message)
+  return NextResponse.json({
+    success: false,
+   message:err.message
+  },{status:500});
+}
 }

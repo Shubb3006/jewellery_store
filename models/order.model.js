@@ -1,5 +1,6 @@
 // models/order.model.js
 import mongoose from "mongoose";
+import { AddressSchema } from "./user.model";
 
 const orderSchema = new mongoose.Schema({
   userId: {
@@ -52,10 +53,17 @@ const orderSchema = new mongoose.Schema({
     default: "PLACED",
   },
 
-  address: {
-    type: String,
-    default:"Sdf"
-  },
+  address:{
+    name: { type: String }, 
+    recipientName: { type: String },
+    phone: { type: String },
+    line1: { type: String },
+    line2: { type: String },
+    city: { type: String },
+    state: { type: String },
+    zip: { type: String },
+    country: { type: String },
+  }
 
 }, { timestamps: true });
 

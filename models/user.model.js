@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const AddressSchema = new mongoose.Schema({
+export const AddressSchema = new mongoose.Schema({
     name: { type: String }, // Home / Office
     recipientName: { type: String },
     phone: { type: String }, // better to store as string for leading 0s

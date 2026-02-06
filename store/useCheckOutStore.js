@@ -5,13 +5,19 @@ import { useCartStore } from "./useCartStore";
 
 export const useCheckoutStore = create((set) => ({
   isCheckingOut: false,
+  selectedAddress:null,
   orders: [],
 
-  checkOut: async () => {
+  checkOut: async ({paymentMethod}) => {
+    const { selectedAddress } = useCheckoutStore.getState();
+    if (!selectedAddress) {
+      toast.error("Please select delivery address");
+      return false;
+    }
     set({ isCheckingOut: true });
 
     try {
-      const res = await axiosInstance.post("/user/orders");
+      const res = await axiosInstance.post("/user/orders",{ address: selectedAddress,paymentMethod});
       useCartStore.getState().clearCart();
       toast.success("Order placed successfully 🎉");
 
@@ -30,4 +36,11 @@ export const useCheckoutStore = create((set) => ({
       set({ isCheckingOut: false });
     }
   },
+
+  setSelectedAddress:(address)=>{
+    set({ selectedAddress: address })
+  },
+  clearCheckout: () =>
+    set({ selectedAddress: null }),
+
 }));

@@ -7,6 +7,7 @@ import { useCheckoutStore } from "@/store/useCheckOutStore";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import CartSkeleton from "@/components/skeletons/CartSkeleton";
+import Link from "next/link";
 
 const Page = () => {
   const router = useRouter();
@@ -29,6 +30,7 @@ const Page = () => {
   useEffect(() => {
     getCart();
   }, [authUser]);
+  console.log(cart);
 
   const handleInc = async (product) => {
     setChangingQuantityId(product._id);
@@ -202,17 +204,21 @@ const Page = () => {
           <span className="font-bold">₹{totalAmount}</span>
         </div>
 
-        <button
+        <Link
+          href={
+            authUser
+              ? "/checkout/addresses"
+              : `/login?redirect=/checkout/addresses`
+          }
           className="btn btn-primary w-full"
-          onClick={handleCheckOut}
-          disabled={isCheckingOut}
+          disabled={isCheckingOut || totalQuantity <= 0}
         >
           {isCheckingOut ? (
             <Loader2 className="animate-spin" />
           ) : (
             "Proceed to Checkout"
           )}
-        </button>
+        </Link>
       </div>
     </div>
   );

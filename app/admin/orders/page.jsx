@@ -51,6 +51,7 @@ export default function AdminDashboard() {
     getAllOrders();
   }, []);
 
+  console.log(allOrders);
   return (
     <div className="flex flex-col min-h-screen">
       <h1 className="text-2xl font-bold mb-5 ml-10 mt-1">All Orders</h1>

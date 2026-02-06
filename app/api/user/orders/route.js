@@ -8,7 +8,13 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     await connectDB();
+    const {address,paymentMethod}=await req.json();
+    console.log(address,paymentMethod)
 
+
+  if (!address) {
+    return res.status(400).json({ message: "Address is required" });
+  }
     const user = await getUserFromCookie(req);
     if (!user) {
       return NextResponse.json(
@@ -57,6 +63,8 @@ export async function POST(req) {
 
     const order = await Order.create({
       userId: user._id,
+      address,
+      paymentMethod,
       items: orderItems,
       totalAmount,
     });

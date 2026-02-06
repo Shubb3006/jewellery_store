@@ -137,9 +137,18 @@ const OrdersPage = () => {
 
             {/* Footer */}
             <div className="flex justify-between items-center mt-4 pt-4 border-t">
-              <p className="text-sm text-gray-600">
-                Delivery Address: {order.address}
-              </p>
+              <div>
+                <p className="font-semibold">{order.address?.name}</p>
+                <p className="text-sm text-gray-600">
+                  {order.address?.recipientName} | {order.address?.phone}
+                </p>
+                <p className="text-sm text-gray-600 mt-1">
+                  {order.address?.line1} {order.address?.line2},{" "}
+                  {order.address?.city}, {order.address?.state} -{" "}
+                  {order.address?.zip}, {order.address?.country}
+                </p>
+              </div>
+
               <p className="text-lg font-bold">Total: ₹{order.totalAmount}</p>
             </div>
           </div>

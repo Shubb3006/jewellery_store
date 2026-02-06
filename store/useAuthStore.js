@@ -30,7 +30,7 @@ export const useAuthStore=create((set,get)=>({
           set({authUser:res.data.user});
           const guestItems = getGuestCart();
           if (guestItems.length > 0) {
-            await axiosInstance.post("/cart/merge", {
+            await axiosInstance.post("/user/cart/merge", {
               items: guestItems,
             });
       
@@ -40,7 +40,7 @@ export const useAuthStore=create((set,get)=>({
           toast.success("Signup Successfull");
           return true;
         } catch (error) {
-            toast.error(error?.response?.data?.message);
+            toast.error(error?.response?.data?.message||error.message);
             console.log(error)
         } finally {
           set({ isSigningUp: false });

@@ -1,17 +1,20 @@
 "use client";
 import { useAddressStore } from "@/store/useAddressStore";
 import React, { useEffect, useState } from "react";
-import { Loader2, Plus } from "lucide-react";
-import AddAddressModal from "../../../components/modals/AddAddressModal";
-import EditAddressModal from "@/components/modals/EditAddressModal";
+import { Loader2, Edit2, Trash2, Plus } from "lucide-react";
+import AddAddressModal from "@/components/modals/AddAddressModal";
 import AddressList from "@/components/AdddressList";
+import { useCheckoutStore } from "@/store/useCheckOutStore";
+import { useRouter } from "next/navigation";
 
 const AddressesPage = () => {
   const { getAddresses, addresses, gettingAddresses, deleteAddress } =
     useAddressStore();
+  const { selectedAddress, setSelectedAddress } = useCheckoutStore();
+  const router = useRouter();
 
   const [showAddForm, setShowAddForm] = useState(false);
-  const [editingAddress, setEditingAddress] = useState(false);
+  //   const [selectedAddress, setSelectedAddress] = useState(null);
 
   useEffect(() => {
     getAddresses();
@@ -38,10 +41,10 @@ const AddressesPage = () => {
         <p className="text-gray-500 text-center">No addresses added yet.</p>
       ) : (
         <AddressList
-        addresses={addresses}
-        showActions
-        onEdit={setEditingAddress}
-        onDelete={deleteAddress}
+          addresses={addresses}
+          selectable
+          selectedId={selectedAddress?._id}
+          onSelect={(addr) => setSelectedAddress(addr)}
         />
       )}
 
@@ -50,13 +53,15 @@ const AddressesPage = () => {
         {showAddForm && (
           <AddAddressModal onClose={() => setShowAddForm(false)} />
         )}
-        {editingAddress && (
-          <EditAddressModal
-            address={editingAddress}
-            onClose={() => setEditingAddress(null)}
-          />
-        )}
       </div>
+
+      <button
+        className="btn btn-primary mt-6"
+        disabled={!selectedAddress}
+        onClick={() => router.push("/checkout/review")}
+      >
+        Continue
+      </button>
     </div>
   );
 };

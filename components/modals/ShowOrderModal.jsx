@@ -46,9 +46,18 @@ const ShowOrderModal = ({ selectedOrder, onClose }) => {
           </div>
 
           <div className="mt-4 border-t pt-4 flex justify-between items-center">
-            <p className="text-sm text-gray-600">
-              Delivery Address: {selectedOrder.address}
-            </p>
+            <div>
+              <p className="font-semibold">{selectedOrder.address?.name}</p>
+              <p className="text-sm text-gray-600">
+                {selectedOrder.address?.recipientName} |{" "}
+                {selectedOrder.address?.phone}
+              </p>
+              <p className="text-sm text-gray-600 mt-1">
+                {selectedOrder.address?.line1} {selectedOrder.address?.line2},{" "}
+                {selectedOrder.address?.city}, {selectedOrder.address?.state} -{" "}
+                {selectedOrder.address?.zip}, {selectedOrder.address?.country}
+              </p>
+            </div>
             <p className="text-lg font-bold">
               Total: ₹{selectedOrder.totalAmount}
             </p>
