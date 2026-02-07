@@ -30,7 +30,6 @@ const Page = () => {
   useEffect(() => {
     getCart();
   }, [authUser]);
-  console.log(cart);
 
   const handleInc = async (product) => {
     setChangingQuantityId(product._id);

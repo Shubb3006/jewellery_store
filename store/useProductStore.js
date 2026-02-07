@@ -7,6 +7,11 @@ const useProductStore = create((set) => ({
   gettingAllProducts: false,
   gettingProduct:false,
 
+  newArrivals: [],
+  bestSellers: [],
+  featured: [],
+  loading: false,
+
   getAllProducts: async () => {
     set({ gettingAllProducts: true });
     try {
@@ -40,6 +45,25 @@ const useProductStore = create((set) => ({
 
       }
    } ,
+
+   fetchHomeProducts: async () => {
+    set({ loading: true });
+
+    try {
+      const res1 = await axiosInstance.get(`/products/new-arrival`);
+      const res2 = await axiosInstance.get(`/products/best-seller`);
+      const res3 = await axiosInstance.get(`/products/featured`);
+      set({ newArrivals: res1.data.products });
+      set({ bestSellers: res2.data.products });
+      set({ featured: res3.data.products });
+    } catch (err) {
+    }
+    finally{
+    set({ loading: false });
+      
+
+    }
+  },
    
 
 }));

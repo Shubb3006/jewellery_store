@@ -28,5 +28,4 @@ export async function PUT(req,{params}){
     );
     }
   }
-  
-  
+

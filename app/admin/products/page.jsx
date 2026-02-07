@@ -120,6 +120,7 @@ const page = () => {
                         >
                           <select
                             className="bg-transparent outline-none"
+                            disabled={product.stock === 0}
                             value={product.isActive ? "true" : "false"}
                             onChange={(e) => {
                               setChangingAvailabilityId(product._id);

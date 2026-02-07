@@ -25,8 +25,8 @@ const paymentMethodStyles = {
 };
 
 const orderStatusOptions = {
-  PLACED: ["CONFIRMED", "CANCELLED", "SHIPPED"],
-  CONFIRMED: ["SHIPPED", "CANCELLED"],
+  PLACED: ["CONFIRMED", "CANCELLED", "SHIPPED", "DELIVERED"],
+  CONFIRMED: ["SHIPPED", "CANCELLED", "DELIVERED"],
   SHIPPED: ["DELIVERED"],
   DELIVERED: [],
   CANCELLED: [],

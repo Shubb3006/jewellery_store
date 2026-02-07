@@ -72,9 +72,11 @@ export async function POST(req) {
         item.productId._id,
         {
           $inc: { stock: -item.quantity },
-          $set: { inStock: item.productId.stock - item.quantity > 0 },
+          $set: { isActive: item.productId.stock - item.quantity > 0 },
         }
       );
+
+        
     }    
     
     cart.items = [];

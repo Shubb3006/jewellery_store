@@ -9,20 +9,16 @@ import Link from "next/link";
 import { useEffect } from "react";
 
 export default function Home() {
-  const { getAllProducts, products, gettingAllProducts } = useProductStore();
+  const { fetchHomeProducts, newArrivals, bestSellers, featured, loading } =
+    useProductStore();
   const { gettingCartItems, getCart } = useCartStore();
 
   useEffect(() => {
     getCart();
-    getAllProducts();
+    fetchHomeProducts();
   }, []);
 
-  if (gettingAllProducts || gettingCartItems) return <LandingPageSkeleton />;
-  console.log(products);
-
-  const featuedProducts = products.filter((p) => p.featured === true);
-  const bestSellerProducts = products.filter((p) => p.bestSeller === true);
-  const newArrivalProducts = products.filter((p) => p.newArrivals === true);
+  if (loading || gettingCartItems) return <LandingPageSkeleton />;
 
   return (
     <div className="min-h-[calc(100vh-64px)]">
@@ -42,38 +38,38 @@ export default function Home() {
       </section>
 
       {/* PRODUCTS SECTION */}
-      {featuedProducts.length > 0 && (
+      {featured.length > 0 && (
         <section className="p-6 max-w-7xl mx-auto">
           <h2 className="text-2xl font-semibold mb-6">Featured Products</h2>
 
-          {!gettingAllProducts && featuedProducts.length === 0 ? (
+          {!loading && featured.length === 0 ? (
             <p className="text-center text-gray-500">No products available</p>
           ) : (
-            <ProductsPage products={featuedProducts} />
+            <ProductsPage products={featured} />
           )}
         </section>
       )}
 
-      {bestSellerProducts.length > 0 && (
+      {bestSellers.length > 0 && (
         <section className="p-6 max-w-7xl mx-auto">
           <h2 className="text-2xl font-semibold mb-6">Best Seller</h2>
 
-          {!gettingAllProducts && featuedProducts.length === 0 ? (
+          {!loading && bestSellers.length === 0 ? (
             <p className="text-center text-gray-500">No products available</p>
           ) : (
-            <ProductsPage products={bestSellerProducts} />
+            <ProductsPage products={bestSellers} />
           )}
         </section>
       )}
 
-      {newArrivalProducts.length > 0 && (
+      {newArrivals.length > 0 && (
         <section className="p-6 max-w-7xl mx-auto">
           <h2 className="text-2xl font-semibold mb-6">New Arrivals</h2>
 
-          {!gettingAllProducts && featuedProducts.length === 0 ? (
+          {!loading && newArrivals.length === 0 ? (
             <p className="text-center text-gray-500">No products available</p>
           ) : (
-            <ProductsPage products={newArrivalProducts} />
+            <ProductsPage products={newArrivals} />
           )}
         </section>
       )}
