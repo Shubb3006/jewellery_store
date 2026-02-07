@@ -15,6 +15,8 @@ export const useAdminStore=create((set)=>({
     updatingPaymentStatus:false,
     changingAvailability:false,
     changingFeaturing:false,
+    changingNewArrival:false,
+    changingBestSeller:false,
 
     getAllOrders:async()=>{
         try {
@@ -114,84 +116,135 @@ export const useAdminStore=create((set)=>({
         } finally {
           set({ updatingOrderStatus: false });
         }
-      },
-      updatePaymentStatus: async (orderId, newPaymentStatus) => {
-        try {
-          set({ updatingPaymentStatus: true });
+    },
+
+    updatePaymentStatus: async (orderId, newPaymentStatus) => {
+      try {
+        set({ updatingPaymentStatus: true });
+      
+        await axiosInstance.put(
+          `/admin/orders/${orderId}/paymentStatus`,
+          { paymentStatus: newPaymentStatus }
+        );
+      
+        // update UI without refetching all orders
+        set((state) => ({
+          allOrders: state.allOrders.map((order) =>
+            order._id === orderId
+              ? { ...order, paymentStatus: newPaymentStatus }
+              : order
+          ),
+        }));
+      } catch (error) {
+        toast.error("Failed to update Payment status");
+      } finally {
+        set({ updatingPaymentStatus: false });
+      }
+    },
+
+    changeAvailability:async(productId,newAvailability)=>{
+      try {
+          set({ changingAvailability: true });
       
           await axiosInstance.put(
-            `/admin/orders/${orderId}/paymentStatus`,
-            { paymentStatus: newPaymentStatus }
+            `/admin/products/${productId}/status`,
+            { availability: newAvailability }
           );
-      
-          // update UI without refetching all orders
-          set((state) => ({
-            allOrders: state.allOrders.map((order) =>
-              order._id === orderId
-                ? { ...order, paymentStatus: newPaymentStatus }
-                : order
+          // useProductStore.getState().getAllProducts()
+          useProductStore.setState((state) => ({
+            products: state.products.map((product) =>
+              product._id === productId
+                ? { ...product, isActive: newAvailability }
+                : product
             ),
           }));
+          toast.success("Availability changes successfully")
+         
+          // update UI without refetching all orders
         } catch (error) {
-          toast.error("Failed to update Payment status");
+          toast.error(error?.response?.data?.message||"Failed to Change Availability status");
         } finally {
-          set({ updatingPaymentStatus: false });
+          set({ changingAvailability: false });
         }
-      },
+    },
 
-      changeAvailability:async(productId,newAvailability)=>{
-        try {
-            set({ changingAvailability: true });
-        
-            await axiosInstance.put(
-              `/admin/products/${productId}/status`,
-              { availability: newAvailability }
-            );
-            // useProductStore.getState().getAllProducts()
-            useProductStore.setState((state) => ({
-              products: state.products.map((product) =>
-                product._id === productId
-                  ? { ...product, isActive: newAvailability }
-                  : product
-              ),
-            }));
+    changeFeaturing:async(productId,newFeatured)=>{
+      try {
+          set({ changingFeaturing: true });
+      
+          await axiosInstance.put(
+            `/admin/products/${productId}/featured`,
+            { isFeatured: newFeatured }
+          );
+          // useProductStore.getState().getAllProducts()
+          useProductStore.setState((state) => ({
+            products: state.products.map((product) =>
+              product._id === productId
+                ? { ...product, featured: newFeatured }
+                : product
+            ),
+          }));
+          toast.success("Featuring changes successfully")
+         
+          // update UI without refetching all orders
+        } catch (error) {
+          toast.error(error?.response?.data?.message||"Failed to Change Featuring status");
+        } finally {
+          set({ changingFeaturing: false });
+        }
+    },
 
-            toast.success("Availability changes successfully")
-           
-            // update UI without refetching all orders
-          } catch (error) {
-            toast.error(error?.response?.data?.message||"Failed to Change Availability status");
-          } finally {
-            set({ changingAvailability: false });
-          }
-      },
+    changeNewArrival:async(productId,newNewArrival)=>{
+      try {
+          set({ changingNewArrival: true });
+      
+          await axiosInstance.put(
+            `/admin/products/${productId}/newArrival`,
+            { isNewArrival: newNewArrival }
+          );
+          // useProductStore.getState().getAllProducts()
+          useProductStore.setState((state) => ({
+            products: state.products.map((product) =>
+              product._id === productId
+                ? { ...product, newArrivals: newNewArrival }
+                : product
+            ),
+          }));
+          toast.success("New Arrivals changes successfully")
+         
+          // update UI without refetching all orders
+        } catch (error) {
+          toast.error(error?.response?.data?.message||"Failed to Change Featuring status");
+        } finally {
+          set({ changingNewArrival: false });
+        }
+    },
 
-      changeFeaturing:async(productId,newFeatured)=>{
-        try {
-            set({ changingFeaturing: true });
-        
-            await axiosInstance.put(
-              `/admin/products/${productId}/featured`,
-              { isFeatured: newFeatured }
-            );
-            // useProductStore.getState().getAllProducts()
-            useProductStore.setState((state) => ({
-              products: state.products.map((product) =>
-                product._id === productId
-                  ? { ...product, featured: newFeatured }
-                  : product
-              ),
-            }));
-
-            toast.success("Featuring changes successfully")
-           
-            // update UI without refetching all orders
-          } catch (error) {
-            toast.error(error?.response?.data?.message||"Failed to Change Featuring status");
-          } finally {
-            set({ changingFeaturing: false });
-          }
-      },
+    changeBestSeller:async(productId,newBestSeller)=>{
+      try {
+          set({ changingBestSeller: true });
+      
+          await axiosInstance.put(
+            `/admin/products/${productId}/bestSeller`,
+            { isBestSeller: newBestSeller }
+          );
+          // useProductStore.getState().getAllProducts()
+          useProductStore.setState((state) => ({
+            products: state.products.map((product) =>
+              product._id === productId
+                ? { ...product, bestSeller: newBestSeller }
+                : product
+            ),
+          }));
+          toast.success("New B  est Seller changes successfully")
+         
+          // update UI without refetching all orders
+        } catch (error) {
+          toast.error(error?.response?.data?.message||"Failed to Change Featuring status");
+        } finally {
+          set({ changingBestSeller: false });
+        }
+    },
 
     uploadImages: async (files) => {
       try {

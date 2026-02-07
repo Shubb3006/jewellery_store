@@ -1,7 +1,7 @@
 "use client";
 
 import ProductsPage from "@/components/Product";
-import ProductsSkeleton from "@/components/skeletons/ProductsSkeleton";
+import LandingPageSkeleton from "@/components/skeletons/LandingPageSkeleton";
 import { useCartStore } from "@/store/useCartStore";
 import useProductStore from "@/store/useProductStore";
 import { ShoppingCart } from "lucide-react";
@@ -17,12 +17,15 @@ export default function Home() {
     getAllProducts();
   }, []);
 
-  if (gettingAllProducts || gettingCartItems) return <ProductsSkeleton />;
+  if (gettingAllProducts || gettingCartItems) return <LandingPageSkeleton />;
+  console.log(products);
 
   const featuedProducts = products.filter((p) => p.featured === true);
+  const bestSellerProducts = products.filter((p) => p.bestSeller === true);
+  const newArrivalProducts = products.filter((p) => p.newArrivals === true);
 
   return (
-    <div className="min-h-[calc(100vh-64px)] ">
+    <div className="min-h-[calc(100vh-64px)]">
       {/* HERO SECTION */}
       <section className="bg-base-200 py-20 px-6 text-center ">
         <h1 className="text-4xl md:text-5xl font-bold">
@@ -39,15 +42,41 @@ export default function Home() {
       </section>
 
       {/* PRODUCTS SECTION */}
-      <section className="p-6 max-w-7xl mx-auto">
-        <h2 className="text-2xl font-semibold mb-6">Featured Products</h2>
+      {featuedProducts.length > 0 && (
+        <section className="p-6 max-w-7xl mx-auto">
+          <h2 className="text-2xl font-semibold mb-6">Featured Products</h2>
 
-        {!gettingAllProducts && featuedProducts.length === 0 ? (
-          <p className="text-center text-gray-500">No products available</p>
-        ) : (
-          <ProductsPage products={featuedProducts} />
-        )}
-      </section>
+          {!gettingAllProducts && featuedProducts.length === 0 ? (
+            <p className="text-center text-gray-500">No products available</p>
+          ) : (
+            <ProductsPage products={featuedProducts} />
+          )}
+        </section>
+      )}
+
+      {bestSellerProducts.length > 0 && (
+        <section className="p-6 max-w-7xl mx-auto">
+          <h2 className="text-2xl font-semibold mb-6">Best Seller</h2>
+
+          {!gettingAllProducts && featuedProducts.length === 0 ? (
+            <p className="text-center text-gray-500">No products available</p>
+          ) : (
+            <ProductsPage products={bestSellerProducts} />
+          )}
+        </section>
+      )}
+
+      {newArrivalProducts.length > 0 && (
+        <section className="p-6 max-w-7xl mx-auto">
+          <h2 className="text-2xl font-semibold mb-6">New Arrivals</h2>
+
+          {!gettingAllProducts && featuedProducts.length === 0 ? (
+            <p className="text-center text-gray-500">No products available</p>
+          ) : (
+            <ProductsPage products={newArrivalProducts} />
+          )}
+        </section>
+      )}
     </div>
   );
 }

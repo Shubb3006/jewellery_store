@@ -9,8 +9,6 @@ export async function POST(req) {
   try {
     await connectDB();
     const {address,paymentMethod}=await req.json();
-    console.log(address,paymentMethod)
-
 
   if (!address) {
     return res.status(400).json({ message: "Address is required" });

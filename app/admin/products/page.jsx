@@ -11,14 +11,19 @@ const page = () => {
   const [editProduct, setEditProduct] = useState(null);
   const [addProduct, setAddProduct] = useState(false);
   const [changingAvailabilityId, setChangingAvailabilityId] = useState(null);
-  const [changingFeaturingId, setChangingFeaturingIdId] = useState(null);
+  const [changingNewArrivalId, setChangingNewArrival] = useState(null);
+  const [changingFeaturingId, setChangingFeaturingId] = useState(null);
+  const [changingBestSellerId, setChangingBestSellerId] = useState(null);
   const { products, gettingAllProducts, getAllProducts } = useProductStore();
   const {
     changeAvailability,
     changeFeaturing,
     changingFeaturing,
     changingAvailability,
-    
+    changeNewArrival,
+    changingNewArrival,
+    changeBestSeller,
+    changingBestSeller,
   } = useAdminStore();
 
   useEffect(() => {
@@ -28,8 +33,6 @@ const page = () => {
   async function handleEdit(product) {
     setEditProduct(product);
   }
-
-  console.log(products);
 
   return (
     <div className="flex flex-col gap-6">
@@ -77,6 +80,12 @@ const page = () => {
                   <th className="px-4 py-2 text-left text-sm font-semibold">
                     Featured
                   </th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold">
+                    New Arrival
+                  </th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold">
+                    Best Seller
+                  </th>
                   <th className="px-4 py-2 text-right text-sm font-semibold">
                     Actions
                   </th>
@@ -95,6 +104,8 @@ const page = () => {
                     <td className="px-4 py-2">₹{product.price}</td>
                     <td className="px-4 py-2">{product.stock}</td>
                     <td className="px-4 py-2">{product.category}</td>
+
+                    {/* status */}
                     <td>
                       {changingAvailability &&
                       changingAvailabilityId === product._id ? (
@@ -124,6 +135,7 @@ const page = () => {
                         </div>
                       )}
                     </td>
+                    {/* feature */}
                     <td>
                       {changingFeaturing &&
                       changingFeaturingId === product._id ? (
@@ -140,8 +152,68 @@ const page = () => {
                             className="bg-transparent outline-none"
                             value={product.featured ? "true" : "false"}
                             onChange={(e) => {
-                              setChangingFeaturingIdId(product._id);
+                              setChangingFeaturingId(product._id);
                               changeFeaturing(
+                                product._id,
+                                e.target.value === "true"
+                              );
+                            }}
+                          >
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                          </select>
+                        </div>
+                      )}
+                    </td>
+                    {/* new arrival */}
+                    <td>
+                      {changingNewArrival &&
+                      changingNewArrivalId === product._id ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        <div
+                          className={`inline-block rounded-full px-2 py-1 ${
+                            product.newArrivals
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
+                          <select
+                            className="bg-transparent outline-none"
+                            value={product.newArrivals ? "true" : "false"}
+                            onChange={(e) => {
+                              setChangingNewArrival(product._id);
+                              changeNewArrival(
+                                product._id,
+                                e.target.value === "true"
+                              );
+                            }}
+                          >
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                          </select>
+                        </div>
+                      )}
+                    </td>
+                    {/* best seller */}
+                    <td>
+                      {changingBestSeller &&
+                      changingBestSellerId === product._id ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        <div
+                          className={`inline-block rounded-full px-2 py-1 ${
+                            product.bestSeller
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
+                          <select
+                            className="bg-transparent outline-none"
+                            value={product.bestSeller ? "true" : "false"}
+                            onChange={(e) => {
+                              setChangingBestSellerId(product._id);
+                              changeBestSeller(
                                 product._id,
                                 e.target.value === "true"
                               );

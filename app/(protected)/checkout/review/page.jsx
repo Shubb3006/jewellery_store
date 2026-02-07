@@ -5,10 +5,11 @@ import { useCartStore } from "@/store/useCartStore";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReviewSkeleton from "@/components/skeletons/ReviewPageSkeleton";
+import { Loader2 } from "lucide-react";
 
 const ReviewPage = () => {
   const router = useRouter();
-  const { selectedAddress, checkOut } = useCheckoutStore();
+  const { selectedAddress, checkOut, isCheckingOut } = useCheckoutStore();
   const { cartLoad, cart, getCart, gettingCartItems } = useCartStore();
   useEffect(() => {
     getCart();
@@ -131,13 +132,13 @@ const ReviewPage = () => {
 
         <button
           className="btn btn-primary w-full mt-4"
+          disabled={isCheckingOut}
           onClick={async () => {
-            // CALL PLACE ORDER API HERE
             await checkOut({ paymentMethod });
             router.push("/orders");
           }}
         >
-          Place Order
+          {isCheckingOut ? <Loader2 className="animate-spin" /> : "Place Order"}
         </button>
       </div>
     </div>

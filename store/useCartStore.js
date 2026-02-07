@@ -48,7 +48,6 @@ export const useCartStore=create((set)=>({
             set({ cart: getGuestCart() });
           }
       
-          toast.success("Item added to your cart");
         } catch (error) {
           toast.error(error?.response?.data?.message || error.message || "Product not available");
         } finally {
