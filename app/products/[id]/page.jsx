@@ -155,10 +155,6 @@ const Page = () => {
             </button>
           )}
 
-          <button className="btn btn-outline flex gap-2">
-            <Heart size={18} />
-            Wishlist
-          </button>
         </div>
 
         {/* EXTRA INFO */}
