@@ -22,7 +22,6 @@ export default function Home() {
 
   return (
     <div className="min-h-[calc(100vh-64px)]">
-      <h1>svkjfbvis</h1>
       {/* HERO SECTION */}
       <section className="bg-base-200 py-20 px-6 text-center ">
         <h1 className="text-4xl md:text-5xl font-bold">
