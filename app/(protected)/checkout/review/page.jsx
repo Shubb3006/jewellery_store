@@ -40,6 +40,7 @@ const ReviewPage = () => {
     0
   );
 
+
   const deliveryFee = subtotal > 999 ? 0 : 49;
   const total = subtotal + deliveryFee;
 
