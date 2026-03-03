@@ -6,8 +6,8 @@ import AddAddressModal from "../../../components/modals/AddAddressModal";
 import EditAddressModal from "@/components/modals/EditAddressModal";
 import AddressList from "@/components/AdddressList";
 import AddressesSkeleton from "@/components/skeletons/AddressSkeleton";
-
 const AddressesPage = () => {
+  
   const { getAddresses, addresses, gettingAddresses, deleteAddress } =
     useAddressStore();
 

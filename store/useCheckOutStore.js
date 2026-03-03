@@ -11,31 +11,40 @@ export const useCheckoutStore = create(
       selectedAddress: null,
       orders: [],
 
-      setSelectedAddress: (address) =>
-        set({ selectedAddress: address }),
+      setSelectedAddress: (address) => set({ selectedAddress: address }),
+      clearCheckout: () => set({ selectedAddress: null }),
 
-      clearCheckout: () =>
-        set({ selectedAddress: null }),
-
-      checkOut: async ({paymentMethod}) => {
+      checkOut: async ({ paymentMethod, items }) => {
         const { selectedAddress } = get();
         if (!selectedAddress) {
           toast.error("Please select delivery address");
           return false;
         }
 
+        if (!items || items.length === 0) {
+          toast.error("No items to checkout");
+          return false;
+        }
+
         set({ isCheckingOut: true });
 
         try {
-          const res = await axiosInstance.post("/user/orders", {
+          await axiosInstance.post("/user/orders", {
             address: selectedAddress,
-            paymentMethod
+            paymentMethod,
+            items: items.map((item) => ({
+              productId: item.productId._id,
+              quantity: item.quantity,
+              isBuyNow: item.isBuyNow || false, // Send Buy Now flag
+            })),
           });
 
-          useCartStore.getState().clearCart();
-          set({ selectedAddress: null }); // IMPORTANT
-          toast.success("Order placed successfully 🎉");
+          // Clear cart only for cart checkout
+          const isCartCheckout = !items.some((item) => item.isBuyNow);
+          if (isCartCheckout) useCartStore.getState().clearCart();
 
+          set({ selectedAddress: null });
+          toast.success("Order placed successfully 🎉");
           return true;
         } catch (e) {
           toast.error(e?.response?.data?.message || "Checkout failed");
@@ -45,8 +54,6 @@ export const useCheckoutStore = create(
         }
       },
     }),
-    {
-      name: "checkout-storage", // localStorage key
-    }
+    { name: "checkout-storage" }
   )
 );

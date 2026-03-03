@@ -63,7 +63,7 @@ const OrdersPage = () => {
             <div className="flex flex-wrap justify-between gap-4 mb-4">
               <div>
                 <p className="text-sm text-gray-500">Order ID</p>
-                <p className="font-medium">{order._id}</p>
+                <p className="font-medium">{order._id.slice(-5)}</p>
               </div>
 
               <div>

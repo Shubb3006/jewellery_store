@@ -3,17 +3,24 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Loader2, Minus, Plus, ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
+import { useRouter } from "next/navigation";
 
 const ProductsPage = ({ products }) => {
   const { addToCart, cart, isAddingItem, changeQuantity } = useCartStore();
   const [addingProductId, setAddingProductId] = useState(null);
   const [changingQuantityId, setChangingQuantityId] = useState(null);
+  const router = useRouter();
 
   async function handleAddingProduct(product) {
     setAddingProductId(product._id);
     await addToCart(product);
     setAddingProductId(null);
   }
+
+  const handleBuyNow = (product) => {
+    // Pass product ID via query or state
+    router.push(`/checkout/addresses?buyNow=${product._id}`);
+  };
 
   const handleInc = async (product) => {
     setChangingQuantityId(product._id);
@@ -73,9 +80,9 @@ const ProductsPage = ({ products }) => {
             </Link>
 
             {/* ACTION AREA (NOT CLICKABLE FOR NAVIGATION) */}
-            <div className="px-4 pb-4 flex justify-center">
+            <div className="px-4 pb-4 flex justify-center flex-col gap-4">
               {cartItem ? (
-                <div className="flex items-center gap-2 border px-1 py-1 rounded-lg">
+                <div className="flex items-center gap-2 border px-1 py-1 rounded-lg justify-between px-5">
                   <button
                     onClick={() => handleDec(p)}
                     disabled={changingQuantityId === p._id}
@@ -114,6 +121,15 @@ const ProductsPage = ({ products }) => {
                   )}
                 </button>
               )}
+              <button
+                disabled={
+                  isUnavailable || (isAddingItem && addingProductId === p._id)
+                }
+                className="btn btn-primary btn-sm sm:btn-md w-full rounded-lg"
+                onClick={() => handleBuyNow(p)}
+              >
+                Buy Now
+              </button>
             </div>
           </div>
         );

@@ -5,11 +5,14 @@ import { Loader2, Plus } from "lucide-react";
 import AddAddressModal from "@/components/modals/AddAddressModal";
 import AddressList from "@/components/AdddressList";
 import { useCheckoutStore } from "@/store/useCheckOutStore";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
 import AddressesSkeleton from "@/components/skeletons/AddressSkeleton";
 
 const AddressesPage = () => {
+  const searchParams = useSearchParams();
+  const buyNowProductId = searchParams.get("buyNow");
+
   const { getAddresses, addresses, gettingAddresses } = useAddressStore();
   const { cart, getCart, gettingCartItems, cartLoad } = useCartStore();
 
@@ -27,7 +30,7 @@ const AddressesPage = () => {
     return <AddressesSkeleton />;
   }
 
-  if (cartLoad && cart.length === 0) {
+  if (cartLoad && cart.length === 0 && !buyNowProductId) {
     redirect("/cart");
   }
 
@@ -65,7 +68,10 @@ const AddressesPage = () => {
       <button
         className="btn btn-primary mt-6"
         disabled={!selectedAddress}
-        onClick={() => router.push("/checkout/review")}
+        onClick={() => {if(buyNowProductId)
+          router.push(`/checkout/review?buyNow=${buyNowProductId}`)
+        else
+        router.push(`/checkout/review`) }}
       >
         Continue
       </button>

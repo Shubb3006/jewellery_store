@@ -2,24 +2,40 @@
 
 import { useCheckoutStore } from "@/store/useCheckOutStore";
 import { useCartStore } from "@/store/useCartStore";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReviewSkeleton from "@/components/skeletons/ReviewPageSkeleton";
 import { Loader2 } from "lucide-react";
+import useProductStore from "@/store/useProductStore";
 
 const ReviewPage = () => {
+  const searchParams = useSearchParams();
+  const buyNowProductId = searchParams.get("buyNow");
+
   const router = useRouter();
   const { selectedAddress, checkOut, isCheckingOut } = useCheckoutStore();
   const { cartLoad, cart, getCart, gettingCartItems } = useCartStore();
+  const { getProduct, product } = useProductStore();
+
   useEffect(() => {
     getCart();
   }, []);
+
+  useEffect(() => {
+    if (buyNowProductId) getProduct(buyNowProductId);
+  }, [buyNowProductId]);
 
   const [paymentMethod, setPaymentMethod] = useState("COD");
 
   if (!selectedAddress) redirect("/checkout/addresses");
 
-  const subtotal = cart.reduce(
+  // Prepare items for checkout
+  const itemsToCheckout =
+    buyNowProductId && product
+      ? [{ productId: product, quantity: 1, isBuyNow: true }]
+      : cart.map((item) => ({ ...item, isBuyNow: false }));
+
+  const subtotal = itemsToCheckout.reduce(
     (sum, item) => sum + item.productId.price * item.quantity,
     0
   );
@@ -29,9 +45,7 @@ const ReviewPage = () => {
 
   if (!cartLoad) return <ReviewSkeleton />;
 
-  if (!gettingCartItems && cart.length === 0) {
-    redirect("/cart");
-  }
+  if (!gettingCartItems && cart.length === 0 && !buyNowProductId) redirect("/cart");
 
   return (
     <div className="max-w-5xl mx-auto p-6 grid md:grid-cols-3 gap-6">
@@ -42,12 +56,9 @@ const ReviewPage = () => {
           <h2 className="font-bold mb-2">Delivery Address</h2>
           <p className="font-medium">{selectedAddress?.recipientName}</p>
           <p className="text-sm text-gray-600">
-            {selectedAddress?.line1}, {selectedAddress?.line2},{" "}
-            {selectedAddress?.city}, {selectedAddress?.state} -{" "}
-            {selectedAddress?.zip}
+            {selectedAddress?.line1}, {selectedAddress?.line2}, {selectedAddress?.city}, {selectedAddress?.state} - {selectedAddress?.zip}
           </p>
           <p className="text-sm">{selectedAddress?.phone}</p>
-
           <button
             className="btn btn-link px-0 mt-2"
             onClick={() => router.push("/checkout/addresses")}
@@ -56,31 +67,17 @@ const ReviewPage = () => {
           </button>
         </div>
 
-        {/* CART ITEMS */}
+        {/* ORDER ITEMS */}
         <div className="border rounded-lg p-4 space-y-4">
           <h2 className="font-bold">Order Items</h2>
-
-          {cart.map((item) => (
-            <div
-              key={item.productId._id}
-              className="flex gap-4 items-center border-b pb-3 last:border-none"
-            >
-              <img
-                src={item.productId.images[0]}
-                alt={item.productId.name}
-                width={80}
-                height={80}
-                className="rounded"
-              />
+          {itemsToCheckout.map((item) => (
+            <div key={item.productId._id} className="flex gap-4 items-center border-b pb-3 last:border-none">
+              <img src={item.productId.images[0]} alt={item.productId.name} width={80} height={80} className="rounded" />
               <div className="flex-1">
-                <p className="font-medium">
-                  {item.productId.name} : ₹{item.productId.price}
-                </p>
+                <p className="font-medium">{item.productId.name} : ₹{item.productId.price}</p>
                 <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
               </div>
-              <p className="font-semibold">
-                ₹{item.productId.price * item.quantity}
-              </p>
+              <p className="font-semibold">₹{item.productId.price * item.quantity}</p>
             </div>
           ))}
         </div>
@@ -88,22 +85,12 @@ const ReviewPage = () => {
         {/* PAYMENT */}
         <div className="border rounded-lg p-4">
           <h2 className="font-bold mb-3">Payment Method</h2>
-
           <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              checked={paymentMethod === "COD"}
-              onChange={() => setPaymentMethod("COD")}
-            />
+            <input type="radio" checked={paymentMethod === "COD"} onChange={() => setPaymentMethod("COD")} />
             Cash on Delivery
           </label>
-
           <label className="flex items-center gap-2 cursor-pointer mt-2">
-            <input
-              type="radio"
-              checked={paymentMethod === "ONLINE"}
-              onChange={() => setPaymentMethod("ONLINE")}
-            />
+            <input type="radio" checked={paymentMethod === "ONLINE"} onChange={() => setPaymentMethod("ONLINE")} />
             Online Payment
           </label>
         </div>
@@ -112,29 +99,15 @@ const ReviewPage = () => {
       {/* RIGHT */}
       <div className="border rounded-lg p-4 h-fit space-y-3">
         <h2 className="font-bold">Price Summary</h2>
-
-        <div className="flex justify-between text-sm">
-          <span>Subtotal</span>
-          <span>₹{subtotal}</span>
-        </div>
-
-        <div className="flex justify-between text-sm">
-          <span>Delivery</span>
-          <span>{deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`}</span>
-        </div>
-
+        <div className="flex justify-between text-sm"><span>Subtotal</span><span>₹{subtotal}</span></div>
+        <div className="flex justify-between text-sm"><span>Delivery</span><span>{deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`}</span></div>
         <hr />
-
-        <div className="flex justify-between font-bold">
-          <span>Total</span>
-          <span>₹{total}</span>
-        </div>
-
+        <div className="flex justify-between font-bold"><span>Total</span><span>₹{total}</span></div>
         <button
           className="btn btn-primary w-full mt-4"
           disabled={isCheckingOut}
           onClick={async () => {
-            await checkOut({ paymentMethod });
+            await checkOut({ paymentMethod, items: itemsToCheckout });
             router.push("/orders");
           }}
         >
