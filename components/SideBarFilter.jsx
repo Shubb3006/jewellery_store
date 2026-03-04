@@ -236,7 +236,7 @@ export default function SidebarFilters() {
 
         {/* Optional Filter Count Badge */}
         {hasFilters && (
-          <span className="absolute top-3 left-8 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+          <span className="absolute top-0 left-5 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
             {(activeCategory ? 1 : 0) + (activeSort ? 1 : 0)}
           </span>
         )}
