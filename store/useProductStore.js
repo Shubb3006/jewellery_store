@@ -12,10 +12,22 @@ const useProductStore = create((set) => ({
   featured: [],
   loading: false,
 
-  getAllProducts: async () => {
+  getAllProducts: async (category,sort) => {
     set({ gettingAllProducts: true });
     try {
-      const res = await axiosInstance.get("/products");
+      // let url="/products?"
+      // if(category)
+      //   url+=`category=${category}`
+      // if(sort)
+      //   url+=`sort=${sort}`
+      // console.log(url)
+      // const res = await axiosInstance.get(url);
+      const res = await axiosInstance.get("/products", {
+        params: {
+          category: category || undefined,
+          sort: sort || undefined,
+        },
+      });
       set({ products: res.data.products });
     } catch (err) {
         toast.error(err?.response?.data?.message);
