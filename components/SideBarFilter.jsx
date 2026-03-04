@@ -226,7 +226,7 @@ export default function SidebarFilters() {
   return (
     <>
       {/* ================= MOBILE BUTTON ================= */}
-      <div className="md:hidden relative p-4 border-b">
+      <div className="md:hidden relative  border-b">
         <button
           onClick={() => setIsOpen(true)}
           className="p-2 rounded-lg hover:bg-base-100 transition"
@@ -262,30 +262,24 @@ export default function SidebarFilters() {
             isOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          {/* <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold">Filters</h2>
-            <button onClick={() => setIsOpen(false)}>
-              <X size={22} />
-            </button>
-          </div> */}
           <div className="flex items-center justify-between">
-  <h2 className="text-xl font-bold">Filters</h2>
+            <h2 className="text-xl font-bold">Filters</h2>
 
-  <div className="flex items-center gap-3">
-    {hasFilters && (
-      <button
-        onClick={clearFilters}
-        className="text-xs font-medium text-red-500 hover:underline"
-      >
-        Clear
-      </button>
-    )}
+            <div className="flex items-center gap-3">
+              {hasFilters && (
+                <button
+                  onClick={clearFilters}
+                  className="text-xs font-medium text-red-500 hover:underline"
+                >
+                  Clear
+                </button>
+              )}
 
-    <button onClick={() => setIsOpen(false)}>
-      <X size={22} />
-    </button>
-  </div>
-</div>
+              <button onClick={() => setIsOpen(false)}>
+                <X size={22} />
+              </button>
+            </div>
+          </div>
 
           <FilterContent
             activeCategory={activeCategory}
