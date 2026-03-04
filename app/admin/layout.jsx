@@ -2,7 +2,7 @@
 
 import { useAuthStore } from "@/store/useAuthStore";
 import { Loader2, LogOut, Menu, X } from "lucide-react";
-import {  usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import NavAdminLinks from "@/components/NavAdminLinks";
 
@@ -46,8 +46,8 @@ export default function AdminLayout({ children }) {
   return (
     <div className="min-h-screen flex bg-base-200">
       {/* Mobile Sidebar Overlay */}
-      {show && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
+
+      {/* <div className="fixed inset-0 z-50 flex lg:hidden transition-all duration-3000">
           <aside className="w-64 bg-base-200 shadow-md flex flex-col">
             <div className="p-6 text-xl font-bold border-b flex justify-between items-center">
               Admin Panel
@@ -66,10 +66,48 @@ export default function AdminLayout({ children }) {
               </button>
             </nav>
           </aside>
-          {/* Overlay backdrop */}
           <div className="flex-1 bg-black/40" onClick={() => setShow(false)} />
         </div>
-      )}
+     */}
+
+      <div
+        className={`fixed inset-0 z-50  lg:hidden transition-opacity duration-300 ${
+          show
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <div
+          className="absolute inset-0 bg-black/40"
+          onClick={() => setShow(false)}
+        />
+
+        {/* <aside
+          className={`w-64 bg-base-200 shadow-md flex flex-col transform transition-transform duration-300 ${
+            show ? "translate-x-0" : "-translate-x-full"
+          }`}
+        > */}
+        <aside
+          className={`absolute left-0 top-0 h-full w-64 bg-base-200 shadow-md flex flex-col transform transition-transform duration-300 ease-in-out ${
+            show ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          <div className="p-6 text-xl font-bold border-b flex justify-between items-center">
+            Admin Panel
+            <X className="cursor-pointer" onClick={() => setShow(false)} />
+          </div>
+
+          <nav className="flex-1 p-4 space-y-2" onClick={() => setShow(false)}>
+            <NavAdminLinks />
+            <button
+              className="btn btn-error w-full mt-auto"
+              onClick={handleLogout}
+            >
+              <LogOut size={18} /> Logout
+            </button>
+          </nav>
+        </aside>
+      </div>
 
       {/* Desktop Sidebar */}
       <aside className="hidden lg:flex w-64 shadow-md flex-col">
