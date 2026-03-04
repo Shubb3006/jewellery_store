@@ -123,7 +123,7 @@ const ProductsPage = ({ products }) => {
               )}
               <button
                 disabled={
-                  isUnavailable || (isAddingItem && addingProductId === p._id)
+                  isUnavailable 
                 }
                 className="btn btn-primary btn-sm sm:btn-md w-full rounded-lg"
                 onClick={() => handleBuyNow(p)}

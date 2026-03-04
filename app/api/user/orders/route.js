@@ -15,7 +15,7 @@ export async function POST(req) {
 
     const user = await getUserFromCookie(req);
     if (!user) return NextResponse.json({ message: "Login required" }, { status: 401 });
-
+    
     const isBuyNowCheckout = items.some(i => i.isBuyNow);
     let orderItems = [];
 

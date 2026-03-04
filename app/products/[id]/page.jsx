@@ -4,10 +4,11 @@ import ProductSkeleton from "@/components/skeletons/ProductSkeleton";
 import { useCartStore } from "@/store/useCartStore";
 import useProductStore from "@/store/useProductStore";
 import { Loader2, ShoppingCart, Heart, Minus, Plus } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Page = () => {
+  const router = useRouter();
   const { getProduct, product, gettingProduct, gettingCartItems } =
     useProductStore();
   const {
@@ -21,6 +22,10 @@ const Page = () => {
 
   const { id } = useParams();
   const [activeImage, setActiveImage] = useState(0);
+  const handleBuyNow = (product) => {
+    // Pass product ID via query or state
+    router.push(`/checkout/addresses?buyNow=${product._id}`);
+  };
 
   useEffect(() => {
     if (id) getProduct(id);
@@ -154,7 +159,13 @@ const Page = () => {
               )}
             </button>
           )}
-
+          <button
+            disabled={isOutOfStock}
+            className="btn btn-primary btn-sm sm:btn-md rounded-lg"
+            onClick={() => handleBuyNow(product)}
+          >
+            Buy Now
+          </button>
         </div>
 
         {/* EXTRA INFO */}
