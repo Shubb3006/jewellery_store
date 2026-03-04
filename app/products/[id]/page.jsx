@@ -161,7 +161,7 @@ const Page = () => {
           )}
           <button
             disabled={isOutOfStock}
-            className="btn btn-primary btn-sm sm:btn-md rounded-lg"
+            className="btn btn-primary rounded-lg"
             onClick={() => handleBuyNow(product)}
           >
             Buy Now
