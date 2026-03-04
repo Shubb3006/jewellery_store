@@ -96,13 +96,13 @@
 //         </div>
 
 //         {/* PRODUCT GRID */}
-        // {products.length === 0 ? (
-        //   <div className="text-center text-gray-500 mt-20">
-        //     No products available
-        //   </div>
-        // ) : (
-        //   <ProductsPage products={products} />
-        // )}
+//         {products.length === 0 ? (
+//           <div className="text-center text-gray-500 mt-20">
+//             No products available
+//           </div>
+//         ) : (
+//           <ProductsPage products={products} />
+//         )}
 //       </main>
 //     </div>
 //   );

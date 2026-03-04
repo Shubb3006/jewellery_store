@@ -18,7 +18,6 @@ const ProductsPage = ({ products }) => {
   }
 
   const handleBuyNow = (product) => {
-    // Pass product ID via query or state
     router.push(`/checkout/addresses?buyNow=${product._id}`);
   };
 
@@ -122,9 +121,7 @@ const ProductsPage = ({ products }) => {
                 </button>
               )}
               <button
-                disabled={
-                  isUnavailable 
-                }
+                disabled={isUnavailable}
                 className="btn btn-primary btn-sm sm:btn-md w-full rounded-lg"
                 onClick={() => handleBuyNow(p)}
               >
