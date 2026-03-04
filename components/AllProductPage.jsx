@@ -19,7 +19,7 @@ export default function ProductSection() {
 
   console.log(products);
 
-  if (true) return <AllProductsPageSkeleton />;
+  if (gettingAllProducts) return <AllProductsPageSkeleton />;
 
   return (
     <main className="flex-1 p-8">

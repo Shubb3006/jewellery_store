@@ -7,7 +7,7 @@ const ProductsSkeleton = () => {
           {/* Title */}
           <div className="h-7 w-48 bg-base-300 rounded mb-6" />
 
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (
               <div
                 key={i}
